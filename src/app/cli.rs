@@ -2,12 +2,12 @@ use clap::{arg, Command};
 
 pub async fn run() -> Result<(), String> {
     let matches = get_args().get_matches();
-    let countries = crate::app::resources::get_countries().await.unwrap();
-
+    
     match matches.subcommand() {
         Some((action @ "add", arg)) | Some((action @ "rm", arg)) => {
-            let name = arg.get_one::<String>("NAME").unwrap();
-            let country = crate::app::utils::get_country(name, countries)?;
+            let countries = crate::app::resources::get_countries().await.unwrap();
+            let name      = arg.get_one::<String>("NAME").unwrap();
+            let country   = crate::app::utils::get_country(name, countries)?;
 
             match action {
                 "add" => crate::app::manager::add(country),
