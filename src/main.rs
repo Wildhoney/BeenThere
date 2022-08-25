@@ -1,5 +1,13 @@
-mod app;
+mod app {
+    pub mod cli;
+    pub mod manager;
+    pub mod resources;
+    pub mod utils;
+    pub mod types;
+}
 
-fn main() {
-    app::run();
+#[tokio::main]
+pub async fn main() {
+    let x = app::cli::run().await;
+    println!("{:?}", x);
 }

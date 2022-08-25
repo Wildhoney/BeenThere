@@ -1,23 +1,28 @@
 use clap::{arg, Command};
 
-const PARAM: &str = "NAME";
-
-pub fn run() -> () {
+pub async fn run() -> Result<(), String> {
     let matches = get_args().get_matches();
+    let countries = crate::app::resources::get_countries().await.unwrap();
 
     match matches.subcommand() {
-        Some(("add", arg)) => {
-            let name = arg.get_one::<String>(PARAM).unwrap();
-            println!("Adding {}", name);
-        },
-        Some(("rm", arg)) => {
-            let name = arg.get_one::<String>(PARAM).unwrap();
-            println!("Removing {}", name);
+        Some((action @ "add", arg)) | Some((action @ "rm", arg)) => {
+            let name = arg.get_one::<String>("NAME").unwrap();
+            let country = crate::app::utils::get_country(name, countries)?;
+
+            match action {
+                "add" => crate::app::manager::add(country),
+                "rm"  => crate::app::manager::add(country),
+                _     => Err(format!("Invalid action: {}", action))
+            }
         },
         Some(("stats", _)) => {
             println!("Lots of lovely stats!");
+            Ok(())
         },
-        _ => println!("I dunno")
+        _ => {
+            println!("I dunno");
+            Ok(())
+        }
     }
 }
 
