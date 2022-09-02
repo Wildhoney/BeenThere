@@ -13,7 +13,6 @@ pub async fn get_countries_from_remote() -> Option<Countries> {
     reqwest::get(COUNTRY_URL).await.unwrap().json::<Countries>().await.ok()
 }
 
-
 pub fn get_country_by_name(country: &String, countries: Countries) -> Result<Country, String> {
     match countries.into_iter().find(|x| {
         let name = country.to_lowercase();
@@ -54,4 +53,16 @@ pub fn write_countries_to_file(countries: Countries) -> Option<()> {
         },
         Err(_)   => None
     }
+}
+
+pub fn get_countries_by_people(countries: &Countries) -> (Country, Country) {
+    let mut countries = countries.clone();
+    countries.sort_by(|a, b| b.population.cmp(&a.population));
+    (countries.first().unwrap().to_owned(), countries.last().unwrap().to_owned())
+}
+
+pub fn get_countries_by_land(countries: &Countries) -> (Country, Country) {
+    let mut countries = countries.clone();
+    countries.sort_by(|a, b| (b.area as usize).cmp(&(a.area as usize)));
+    (countries.first().unwrap().to_owned(), countries.last().unwrap().to_owned())
 }

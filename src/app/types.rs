@@ -7,7 +7,7 @@ pub struct Country {
     pub name: Name,
     pub flag: String,
     pub population: usize,
-    pub area: Option<f64>,
+    pub area: f64,
 
     #[serde(rename(deserialize = "altSpellings"))]
     pub alt_spellings: Vec<String>
