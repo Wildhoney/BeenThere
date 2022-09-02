@@ -12,7 +12,6 @@ pub fn render(output: Output) -> () {
         Output::Add(country)    => print_added_or_removed("Added".to_string(), country),
         Output::Remove(country) => print_added_or_removed("Removed".to_string(), country),
         Output::List(countries) => {
-
             match countries.len() {
                 0 => println!("You haven't yet been to {} countries! {}", "any".bold(), "Not even your home country...".white()),
                 _ => {
@@ -30,7 +29,6 @@ pub fn render(output: Output) -> () {
             
                     let mut countries = countries.clone();
                     countries.sort_by(|a, b| a.name.common.to_lowercase().cmp(&b.name.common.to_lowercase()));
-        
                     countries.into_iter().for_each(|country| {
                         println!("{} {}  {}", "◦".dimmed(), country.flag, country.name.common);
                     });
