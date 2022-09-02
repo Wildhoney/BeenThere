@@ -4,10 +4,11 @@ mod app {
     pub mod resources;
     pub mod utils;
     pub mod types;
+    pub mod display;
 }
 
 #[tokio::main]
 pub async fn main() {
-    let x = app::cli::run().await;
-    println!("{:?}", x);
+    let output = app::cli::run().await;
+    app::display::render(output);
 }

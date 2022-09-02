@@ -1,6 +1,8 @@
 use clap::{arg, Command};
 
-pub async fn run() -> Result<(), String> {
+use crate::app::types::Output;
+
+pub async fn run() -> Result<Output, String> {
     let matches = get_args().get_matches();
     
     match matches.subcommand() {
@@ -11,17 +13,18 @@ pub async fn run() -> Result<(), String> {
 
             match action {
                 "add" => crate::app::manager::add(country),
-                "rm"  => crate::app::manager::add(country),
+                // "rm"  => crate::app::manager::add(country),
                 _     => Err(format!("Invalid action: {}", action))
             }
         },
+        Some(("ls", _))    => crate::app::manager::list(),
         Some(("stats", _)) => {
             println!("Lots of lovely stats!");
-            Ok(())
+            Ok(Output::Noop)
         },
         _ => {
             println!("I dunno");
-            Ok(())
+            Ok(Output::Noop)
         }
     }
 }
