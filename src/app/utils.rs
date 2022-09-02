@@ -11,8 +11,10 @@ pub fn get_country(country: &String, countries: Countries) -> Result<Country, St
     match countries.into_iter().find(|x| {
         let name = country.to_lowercase();
         let is_name_matched = x.name.common.to_lowercase() == name;
-        let is_cioc_matched = *x.cioc.as_ref().unwrap_or(&"".to_string()).to_lowercase() == name;
-        return is_name_matched || is_cioc_matched;
+        let alt_spellings = x.alt_spellings.clone().into_iter().map(|name| name.to_lowercase()).collect::<Vec<_>>();
+        let is_alt_spelling_matched = alt_spellings.contains(&name);
+
+        return is_name_matched || is_alt_spelling_matched;
     }) {
         Some(country) => Ok(country),
         _             => Err(format!("We're unable to find the country '{}'", country))

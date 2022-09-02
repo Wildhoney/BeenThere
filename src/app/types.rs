@@ -6,7 +6,9 @@ pub type Countries = Vec<Country>;
 pub struct Country {
     pub name: Name,
     pub flag: String,
-    pub cioc: Option<String>
+
+    #[serde(rename(deserialize = "altSpellings"))]
+    pub alt_spellings: Vec<String>
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
