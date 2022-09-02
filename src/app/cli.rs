@@ -2,29 +2,34 @@ use clap::{arg, Command};
 
 use crate::app::types::Output;
 
-pub async fn run() -> Result<Output, String> {
+pub async fn run() -> Output {
     let matches   = get_args().get_matches();
     let countries = crate::app::resources::get_countries().await.unwrap();
     
     match matches.subcommand() {
         Some((action @ "add", arg)) | Some((action @ "rm", arg)) => {
             let name      = arg.get_one::<String>("NAME").unwrap();
-            let country   = crate::app::utils::get_country(name, countries.clone())?;
+            let country   = crate::app::utils::get_country(name, countries.clone());
 
-            match action {
-                "add" => crate::app::manager::add(country, countries.clone()),
-                "rm"  => crate::app::manager::remove(country, countries.clone()),
-                _     => Err(format!("Invalid action: {}", action))
+            match country {
+                Ok(country) => {
+                    match action {
+                        "add" => crate::app::manager::add(country, countries.clone()),
+                        "rm"  => crate::app::manager::remove(country, countries.clone()),
+                        _     => Output::Noop
+                    }
+                },
+                Err(_) => Output::Invalid(name.to_string())
             }
         },
         Some(("ls", _))    => crate::app::manager::list(countries.clone()),
         Some(("stats", _)) => {
             println!("Lots of lovely stats!");
-            Ok(Output::Noop)
+            Output::Noop
         },
         _ => {
             println!("I dunno");
-            Ok(Output::Noop)
+            Output::Noop
         }
     }
 }

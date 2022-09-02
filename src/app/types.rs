@@ -21,5 +21,6 @@ pub enum Output {
     Add(Country),
     Remove(Country),
     List(Countries),
+    Invalid(String),
     Noop
 }
