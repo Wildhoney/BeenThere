@@ -1,2 +1,5 @@
 # BeenThere
-Terminal application for listing the countries you've visited with other interesting statistics thrown in
+
+> Terminal application for listing the countries you've visited with other interesting statistics thrown in
+
+![Screenshot](media/screenshot.png)
