@@ -53,7 +53,7 @@ pub fn get_args() -> Command<'static> {
                 .arg_required_else_help(true),
         )
         .subcommand(
-            Command::new("stats")
-                .about("List out all the statistics related to your travels")
+            Command::new("ls")
+                .about("List out all of the countries you have visited")
         )
 }
