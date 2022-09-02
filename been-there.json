@@ -1,266 +1,46 @@
 [
-  {
-    "name": {
-      "common": "Belgium"
-    },
-    "flag": "🇧🇪"
-  },
-  {
-    "name": {
-      "common": "Singapore"
-    },
-    "flag": "🇸🇬"
-  },
-  {
-    "name": {
-      "common": "Argentina"
-    },
-    "flag": "🇦🇷"
-  },
-  {
-    "name": {
-      "common": "Brazil"
-    },
-    "flag": "🇧🇷"
-  },
-  {
-    "name": {
-      "common": "Uruguay"
-    },
-    "flag": "🇺🇾"
-  },
-  {
-    "name": {
-      "common": "Barbados"
-    },
-    "flag": "🇧🇧"
-  },
-  {
-    "name": {
-      "common": "France"
-    },
-    "flag": "🇫🇷"
-  },
-  {
-    "name": {
-      "common": "Netherlands"
-    },
-    "flag": "🇳🇱"
-  },
-  {
-    "name": {
-      "common": "Cape Verde"
-    },
-    "flag": "🇨🇻"
-  },
-  {
-    "name": {
-      "common": "Austria"
-    },
-    "flag": "🇦🇹"
-  },
-  {
-    "name": {
-      "common": "Germany"
-    },
-    "flag": "🇩🇪"
-  },
-  {
-    "name": {
-      "common": "Norway"
-    },
-    "flag": "🇳🇴"
-  },
-  {
-    "name": {
-      "common": "Denmark"
-    },
-    "flag": "🇩🇰"
-  },
-  {
-    "name": {
-      "common": "Cyprus"
-    },
-    "flag": "🇨🇾"
-  },
-  {
-    "name": {
-      "common": "Italy"
-    },
-    "flag": "🇮🇹"
-  },
-  {
-    "name": {
-      "common": "Spain"
-    },
-    "flag": "🇪🇸"
-  },
-  {
-    "name": {
-      "common": "United Kingdom"
-    },
-    "flag": "🇬🇧"
-  },
-  {
-    "name": {
-      "common": "Croatia"
-    },
-    "flag": "🇭🇷"
-  },
-  {
-    "name": {
-      "common": "Czechia"
-    },
-    "flag": "🇨🇿"
-  },
-  {
-    "name": {
-      "common": "Slovakia"
-    },
-    "flag": "🇸🇰"
-  },
-  {
-    "name": {
-      "common": "Slovenia"
-    },
-    "flag": "🇸🇮"
-  },
-  {
-    "name": {
-      "common": "Russia"
-    },
-    "flag": "🇷🇺"
-  },
-  {
-    "name": {
-      "common": "Poland"
-    },
-    "flag": "🇵🇱"
-  },
-  {
-    "name": {
-      "common": "United Arab Emirates"
-    },
-    "flag": "🇦🇪"
-  },
-  {
-    "name": {
-      "common": "Myanmar"
-    },
-    "flag": "🇲🇲"
-  },
-  {
-    "name": {
-      "common": "Hong Kong"
-    },
-    "flag": "🇭🇰"
-  },
-  {
-    "name": {
-      "common": "Malaysia"
-    },
-    "flag": "🇲🇾"
-  },
-  {
-    "name": {
-      "common": "Japan"
-    },
-    "flag": "🇯🇵"
-  },
-  {
-    "name": {
-      "common": "Cambodia"
-    },
-    "flag": "🇰🇭"
-  },
-  {
-    "name": {
-      "common": "Thailand"
-    },
-    "flag": "🇹🇭"
-  },
-  {
-    "name": {
-      "common": "Turkey"
-    },
-    "flag": "🇹🇷"
-  },
-  {
-    "name": {
-      "common": "Tunisia"
-    },
-    "flag": "🇹🇳"
-  },
-  {
-    "name": {
-      "common": "Qatar"
-    },
-    "flag": "🇶🇦"
-  },
-  {
-    "name": {
-      "common": "Egypt"
-    },
-    "flag": "🇪🇬"
-  },
-  {
-    "name": {
-      "common": "Maldives"
-    },
-    "flag": "🇲🇻"
-  },
-  {
-    "name": {
-      "common": "Portugal"
-    },
-    "flag": "🇵🇹"
-  },
-  {
-    "name": {
-      "common": "Mexico"
-    },
-    "flag": "🇲🇽"
-  },
-  {
-    "name": {
-      "common": "Hungary"
-    },
-    "flag": "🇭🇺"
-  },
-  {
-    "name": {
-      "common": "Gibraltar"
-    },
-    "flag": "🇬🇮"
-  },
-  {
-    "name": {
-      "common": "Switzerland"
-    },
-    "flag": "🇨🇭"
-  },
-  {
-    "name": {
-      "common": "Malta"
-    },
-    "flag": "🇲🇹"
-  },
-  {
-    "name": {
-      "common": "Greece"
-    },
-    "flag": "🇬🇷"
-  },
-  {
-    "name": {
-      "common": "Latvia"
-    },
-    "flag": "🇱🇻"
-  },
-  {
-    "name": {
-      "common": "Estonia"
-    },
-    "flag": "🇪🇪"
-  }
+  "Uruguay",
+  "Austria",
+  "Turkey",
+  "Latvia",
+  "Mexico",
+  "Tunisia",
+  "Greece",
+  "Egypt",
+  "Malta",
+  "Cambodia",
+  "Qatar",
+  "Slovakia",
+  "United Arab Emirates",
+  "Germany",
+  "Italy",
+  "Portugal",
+  "Spain",
+  "Thailand",
+  "Slovenia",
+  "Gibraltar",
+  "Switzerland",
+  "Barbados",
+  "Myanmar",
+  "Brazil",
+  "Denmark",
+  "Norway",
+  "Cape Verde",
+  "Japan",
+  "Cyprus",
+  "Maldives",
+  "Singapore",
+  "France",
+  "Hungary",
+  "United Kingdom",
+  "Estonia",
+  "Netherlands",
+  "Malaysia",
+  "Croatia",
+  "Czechia",
+  "Argentina",
+  "Hong Kong",
+  "Poland",
+  "Belgium",
+  "Russia"
 ]
