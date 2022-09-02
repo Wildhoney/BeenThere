@@ -30,6 +30,7 @@ name = "been-there"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "figlet-rs",
  "reqwest",
  "serde",
  "serde_json",
@@ -138,6 +139,12 @@ checksum = "a7a407cfaa3385c4ae6b23e84623d48c2798d06e3e6a1878f7f59f17b3f86499"
 dependencies = [
  "instant",
 ]
+
+[[package]]
+name = "figlet-rs"
+version = "0.1.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "59893843a423e9726b35a3110cd2be573bc9deddc553b0ff286107189b02d1aa"
 
 [[package]]
 name = "fnv"
