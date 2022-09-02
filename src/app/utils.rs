@@ -7,7 +7,14 @@ use crate::app::types::{Countries, Country};
 
 const FILENAME: &str = "been-there.json";
 
-pub fn get_country(country: &String, countries: Countries) -> Result<Country, String> {
+const COUNTRY_URL: &str = "https://restcountries.com/v3.1/all";
+
+pub async fn get_countries_from_remote() -> Option<Countries> {
+    reqwest::get(COUNTRY_URL).await.unwrap().json::<Countries>().await.ok()
+}
+
+
+pub fn get_country_by_name(country: &String, countries: Countries) -> Result<Country, String> {
     match countries.into_iter().find(|x| {
         let name = country.to_lowercase();
         let is_name_matched = x.name.common.to_lowercase() == name;

@@ -1,7 +1,6 @@
 mod app {
     pub mod cli;
     pub mod manager;
-    pub mod resources;
     pub mod utils;
     pub mod types;
     pub mod display;
