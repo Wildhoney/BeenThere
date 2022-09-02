@@ -2,12 +2,13 @@ use serde::{Serialize, Deserialize};
 
 pub type Countries = Vec<Country>;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Country {
-    pub name: Name
+    pub name: Name,
+    pub flag: String
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Name {
     pub common: String
 }
@@ -15,6 +16,7 @@ pub struct Name {
 #[derive(Debug)]
 pub enum Output {
     Add(Country),
+    Remove(Country),
     List(Countries),
     Noop
 }

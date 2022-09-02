@@ -13,7 +13,7 @@ pub async fn run() -> Result<Output, String> {
 
             match action {
                 "add" => crate::app::manager::add(country),
-                // "rm"  => crate::app::manager::add(country),
+                "rm"  => crate::app::manager::remove(country),
                 _     => Err(format!("Invalid action: {}", action))
             }
         },
