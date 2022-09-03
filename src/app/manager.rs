@@ -4,14 +4,20 @@ use crate::app::utils::{read_countries_from_file, write_countries_to_file};
 pub fn add(country: Country, countries: Countries) -> Output {
     let mut countries = read_countries_from_file(countries);
     countries.push(country.clone());
-    write_countries_to_file(countries);
-    Output::Add(country)
+
+    match write_countries_to_file(countries) {
+        Some(_) => Output::Add(country),
+        None    => Output::Unwritable
+    }
 }
 
 pub fn remove(country: Country, countries: Countries) -> Output {
     let countries = read_countries_from_file(countries).into_iter().filter(|x| *x != country).collect::<Countries>();
-    write_countries_to_file(countries);
-    Output::Remove(country)
+
+    match write_countries_to_file(countries) {
+        Some(_) => Output::Remove(country),
+        None    => Output::Unwritable
+    }
 }
 
 pub fn list(countries: Countries) -> Output {

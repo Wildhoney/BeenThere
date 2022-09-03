@@ -2,7 +2,7 @@ use figlet_rs::FIGfont;
 use colored::*;
 use num_format::{Locale, ToFormattedString};
 
-use crate::app::{types::{Country, Output}, utils::{get_countries_by_people, get_countries_by_land}};
+use crate::app::{types::{Country, Output}, utils::{FILENAME, get_countries_by_people, get_countries_by_land}};
 
 pub fn render(output: Output) -> () {
     let standard_font = FIGfont::standand().unwrap();
@@ -36,6 +36,7 @@ pub fn render(output: Output) -> () {
             }
         },
         Output::Invalid(name) => print_error(format!("Invalid country: {}", name.white())),
+        Output::Unwritable    => print_error(format!("Cannot write countries to: {}", FILENAME.white())),
         Output::Noop          => print_error("Invalid command".to_string())
     }
 

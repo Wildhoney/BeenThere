@@ -24,5 +24,6 @@ pub enum Output {
     Remove(Country),
     List(Countries),
     Invalid(String),
+    Unwritable,
     Noop
 }

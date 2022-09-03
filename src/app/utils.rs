@@ -5,7 +5,7 @@ use itertools::Itertools;
 
 use crate::app::types::{Countries, Country};
 
-const FILENAME: &str = "been-there.json";
+pub const FILENAME: &str = "been-there.json";
 
 const COUNTRY_URL: &str = "https://restcountries.com/v3.1/all";
 
