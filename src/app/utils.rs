@@ -62,3 +62,38 @@ pub fn get_countries_by_land(countries: &Countries) -> (Country, Country) {
     countries.sort_by(|a, b| (b.area as usize).cmp(&(a.area as usize)));
     (countries.first().unwrap().to_owned(), countries.last().unwrap().to_owned())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use crate::app::mocks::get_mock_countries;
+
+    #[test]
+    fn it_can_get_countries_by_name() {
+        let (countries, _, spain, _) = get_mock_countries();
+        assert_eq!(get_country_by_name(&"spain".to_string(), countries), Some(spain));
+    }
+
+    #[test]
+    fn it_can_get_countries_by_alt_spellings() {
+        let (countries, france, _, _) = get_mock_countries();
+        assert_eq!(get_country_by_name(&"fr".to_string(), countries), Some(france));
+    }
+
+    #[test]
+    fn it_can_get_min_max_people_from_countries() {
+        let (countries, france, _, greece) = get_mock_countries();
+        let (most_people, fewest_people)   = get_countries_by_people(&countries);
+        assert_eq!(most_people, greece);
+        assert_eq!(fewest_people, france);
+    }
+
+    #[test]
+    fn it_can_get_min_max_land_from_countries() {
+        let (countries, _, spain, greece) = get_mock_countries();
+        let (most_land, least_land)        = get_countries_by_land(&countries);
+        assert_eq!(most_land, spain);
+        assert_eq!(least_land, greece);
+    }
+}
