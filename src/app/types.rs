@@ -26,5 +26,5 @@ pub enum Output {
     Invalid(String),
     Unwritable,
     Unfetchable,
-    Noop
+    Unactionable
 }

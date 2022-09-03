@@ -11,10 +11,10 @@ pub fn render(output: Output) -> () {
         Output::Add(country)    => print::added_or_removed("Added".to_string(), country),
         Output::Remove(country) => print::added_or_removed("Removed".to_string(), country),
         Output::List(countries) => print::list(countries),
-        Output::Invalid(name)   => print::error(format!("Invalid country: {}", name.white())),
-        Output::Unwritable      => print::error(format!("Cannot write countries to: {}", FILENAME.white())),
-        Output::Unfetchable     => print::error("Cannot fetch countries at the moment".to_string()),
-        Output::Noop            => print::error("Invalid command".to_string()),
+        Output::Invalid(name)   => print::error(format!("Invalid country: {}.", name.white())),
+        Output::Unwritable      => print::error(format!("Cannot write countries to: {}.", FILENAME.white())),
+        Output::Unfetchable     => print::error("Cannot fetch countries at the moment.".to_string()),
+        Output::Unactionable    => print::error(format!("Invalid command supplied, try: {}, {} or {}.", "add".white(), "rm".white(), "ls".white()))
     }
 
     println!("\n");

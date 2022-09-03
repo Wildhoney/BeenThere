@@ -16,14 +16,14 @@ pub async fn run() -> Output {
                             match action {
                                 "add" => add(country, countries.clone()),
                                 "rm"  => remove(country, countries.clone()),
-                                _     => Output::Noop
+                                _     => Output::Unactionable
                             }
                         },
                         None => Output::Invalid(name.to_string())
                     }
                 },
                 Some(("ls", _)) => list(countries.clone()),
-                _               => Output::Noop
+                _               => Output::Unactionable
             }
         },
         None => Output::Unfetchable
