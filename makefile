@@ -5,3 +5,4 @@ build:
 
 test:
 	cargo test
+	rm -f ./been-there.mock.json
