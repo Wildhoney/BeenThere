@@ -27,14 +27,14 @@ pub fn get_country_by_name(country: &String, countries: Countries) -> Option<Cou
     })
 }
 
-pub fn read_countries_from_file(countries: Countries) -> Countries {
-    let mut buffer = fs::read_to_string(FILENAME).unwrap_or_else(|_| "[]".to_string());
+pub fn read_countries_from_file(filename: &str, countries: Countries) -> Countries {
+    let mut buffer = fs::read_to_string(filename).unwrap_or_else(|_| "[]".to_string());
     let names = serde_json::from_str::<Vec<String>>(&mut buffer).unwrap_or_else(|_| vec![]);
     countries.into_iter().filter_map(|country| names.contains(&country.name.common).then_some(country)).collect::<Countries>()
 }
 
-pub fn write_countries_to_file(countries: Countries) -> Option<()> {
-    let file = OpenOptions::new().write(true).read(true).create(true).truncate(true).open(FILENAME);
+pub fn write_countries_to_file(filename: &str, countries: Countries) -> Option<()> {
+    let file = OpenOptions::new().write(true).read(true).create(true).truncate(true).open(filename);
     let names = countries.into_iter().map(|country| country.name.common).unique().collect::<Vec<String>>();
 
     match file {
@@ -57,8 +57,12 @@ pub fn get_countries_by_land(countries: &Countries) -> (Country, Country) {
 
 #[cfg(test)]
 mod tests {
+    use std::fs::remove_file;
+
     use super::*;
     use crate::app::mocks::get_mock_countries;
+
+    const MOCK_FILENAME: &str = "been-there.mock.json";
 
     #[test]
     fn it_can_get_countries_by_name() {
@@ -86,5 +90,13 @@ mod tests {
         let (most_land, least_land)       = get_countries_by_land(&countries);
         assert_eq!(most_land, spain);
         assert_eq!(least_land, greece);
+    }
+
+    #[test]
+    fn it_should_read_and_write_from_file() {
+        let (countries, _, _, _) = get_mock_countries();
+        assert_eq!(write_countries_to_file(MOCK_FILENAME, countries.clone()), Some(()));
+        assert_eq!(read_countries_from_file(MOCK_FILENAME, countries.clone()), countries.clone());
+        remove_file(MOCK_FILENAME).ok();
     }
 }
