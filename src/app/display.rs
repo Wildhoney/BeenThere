@@ -13,7 +13,8 @@ pub fn render(output: Output) -> () {
         Output::List(countries) => print::list(countries),
         Output::Invalid(name)   => print::error(format!("Invalid country: {}", name.white())),
         Output::Unwritable      => print::error(format!("Cannot write countries to: {}", FILENAME.white())),
-        Output::Noop            => print::error("Invalid command".to_string())
+        Output::Unfetchable     => print::error("Cannot fetch countries at the moment".to_string()),
+        Output::Noop            => print::error("Invalid command".to_string()),
     }
 
     println!("\n");

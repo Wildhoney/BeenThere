@@ -25,5 +25,6 @@ pub enum Output {
     List(Countries),
     Invalid(String),
     Unwritable,
+    Unfetchable,
     Noop
 }

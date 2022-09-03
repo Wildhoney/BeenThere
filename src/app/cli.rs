@@ -4,27 +4,31 @@ use crate::app::types::Output;
 use crate::app::manager::{add, remove, list};
 
 pub async fn run() -> Output {
-    let matches   = get_args().get_matches();
-    let countries = crate::app::utils::get_countries_from_remote().await.unwrap();
+    let matches = get_args().get_matches();
     
-    match matches.subcommand() {
-        Some((action @ "add", arg)) | Some((action @ "rm", arg)) => {
-            let name    = arg.get_one::<String>("NAME").unwrap();
-            let country = crate::app::utils::get_country_by_name(name, countries.clone());
-
-            match country {
-                Some(country) => {
-                    match action {
-                        "add" => add(country, countries.clone()),
-                        "rm"  => remove(country, countries.clone()),
-                        _     => Output::Noop
+    match crate::app::utils::get_countries_from_remote().await {
+        Some(countries) => {
+            match matches.subcommand() {
+                Some((action @ "add", arg)) | Some((action @ "rm", arg)) => {
+                    let name    = arg.get_one::<String>("NAME").unwrap();
+                    let country = crate::app::utils::get_country_by_name(name, countries.clone());
+        
+                    match country {
+                        Some(country) => {
+                            match action {
+                                "add" => add(country, countries.clone()),
+                                "rm"  => remove(country, countries.clone()),
+                                _     => Output::Noop
+                            }
+                        },
+                        None => Output::Invalid(name.to_string())
                     }
                 },
-                None => Output::Invalid(name.to_string())
+                Some(("ls", _)) => list(countries.clone()),
+                _               => Output::Noop
             }
         },
-        Some(("ls", _)) => list(countries.clone()),
-        _               => Output::Noop
+        None => Output::Unfetchable
     }
 }
 
