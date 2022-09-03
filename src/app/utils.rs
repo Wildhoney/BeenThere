@@ -92,7 +92,7 @@ mod tests {
     #[test]
     fn it_can_get_min_max_land_from_countries() {
         let (countries, _, spain, greece) = get_mock_countries();
-        let (most_land, least_land)        = get_countries_by_land(&countries);
+        let (most_land, least_land)       = get_countries_by_land(&countries);
         assert_eq!(most_land, spain);
         assert_eq!(least_land, greece);
     }
