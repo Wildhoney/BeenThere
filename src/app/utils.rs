@@ -27,11 +27,7 @@ pub fn get_country_by_name(country: &String, countries: Countries) -> Option<Cou
 pub fn read_countries_from_file(countries: Countries) -> Countries {
     let mut buffer = fs::read_to_string(FILENAME).unwrap_or_else(|_| "[]".to_string());
     let names = serde_json::from_str::<Vec<String>>(&mut buffer).unwrap_or_else(|_| vec![]);
-
-    countries.into_iter().filter_map(|country| match names.contains(&country.name.common) {
-        true  => Some(country),
-        false => None
-    }).collect::<Countries>()
+    countries.into_iter().filter_map(|country| names.contains(&country.name.common).then_some(country)).collect::<Countries>()
 }
 
 pub fn write_countries_to_file(countries: Countries) -> Option<()> {
@@ -39,15 +35,8 @@ pub fn write_countries_to_file(countries: Countries) -> Option<()> {
     let names = countries.into_iter().map(|country| country.name.common).unique().collect::<Vec<String>>();
 
     match file {
-        Ok(mut file) => {
-            let result = file.write_all(serde_json::to_string_pretty(&names).unwrap().as_bytes());
-
-            match result {
-                Ok(_)  => Some(()),
-                Err(_) => None
-            }
-        },
-        Err(_)   => None
+        Ok(mut file) => file.write_all(serde_json::to_string_pretty(&names).unwrap().as_bytes()).ok(),
+        Err(_)       => None
     }
 }
 
@@ -66,7 +55,6 @@ pub fn get_countries_by_land(countries: &Countries) -> (Country, Country) {
 #[cfg(test)]
 mod tests {
     use super::*;
-
     use crate::app::mocks::get_mock_countries;
 
     #[test]
