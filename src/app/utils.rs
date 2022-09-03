@@ -10,7 +10,6 @@ pub const FILENAME: &str = "been-there.json";
 const COUNTRY_URL: &str = "https://restcountries.com/v3.1/all";
 
 pub async fn get_countries_from_remote() -> Option<Countries> {
-
     match reqwest::get(COUNTRY_URL).await {
         Ok(response) => response.json::<Countries>().await.ok(),
         Err(_)       => None

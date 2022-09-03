@@ -4,11 +4,9 @@ use crate::app::types::Output;
 use crate::app::manager::{add, remove, list};
 
 pub async fn run() -> Output {
-    let matches = get_args().get_matches();
-    
     match crate::app::utils::get_countries_from_remote().await {
         Some(countries) => {
-            match matches.subcommand() {
+            match get_args().get_matches().subcommand() {
                 Some((action @ "add", arg)) | Some((action @ "rm", arg)) => {
                     let name    = arg.get_one::<String>("NAME").unwrap();
                     let country = crate::app::utils::get_country_by_name(name, countries.clone());
