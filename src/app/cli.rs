@@ -13,14 +13,14 @@ pub async fn run() -> Output {
             let country = crate::app::utils::get_country_by_name(name, countries.clone());
 
             match country {
-                Ok(country) => {
+                Some(country) => {
                     match action {
                         "add" => add(country, countries.clone()),
                         "rm"  => remove(country, countries.clone()),
                         _     => Output::Noop
                     }
                 },
-                Err(_) => Output::Invalid(name.to_string())
+                None => Output::Invalid(name.to_string())
             }
         },
         Some(("ls", _)) => list(countries.clone()),
