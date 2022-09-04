@@ -3,7 +3,7 @@ use std::io::prelude::*;
 use std::fs::OpenOptions;
 use itertools::Itertools;
 
-use crate::app::types::{Countries, Country};
+use crate::app::types::{Countries, Country, Continents};
 
 const COUNTRY_URL: &str = "https://restcountries.com/v3.1/all";
 
@@ -19,9 +19,9 @@ pub fn get_country_by_name(country: &String, countries: Countries) -> Option<Cou
         let name = country.to_lowercase();
         let is_name_matched = x.name.common.to_lowercase() == name;
         let alt_spellings = x.alt_spellings.clone().into_iter().map(|name| name.to_lowercase()).collect::<Vec<_>>();
-        let is_alt_spelling_matched = alt_spellings.contains(&name);
+        let is_alt_spellings_matched = alt_spellings.contains(&name);
 
-        is_name_matched || is_alt_spelling_matched
+        is_name_matched || is_alt_spellings_matched
     })
 }
 
@@ -43,14 +43,37 @@ pub fn write_countries_to_file(filename: &str, countries: Countries) -> Option<(
 
 pub fn get_countries_by_people(countries: &Countries) -> (Country, Country) {
     let mut countries = countries.clone();
-    countries.sort_by(|a, b| b.population.cmp(&a.population));
+    countries.sort_by(|a, b| a.population.cmp(&b.population));
     (countries.first().unwrap().to_owned(), countries.last().unwrap().to_owned())
 }
 
 pub fn get_countries_by_land(countries: &Countries) -> (Country, Country) {
     let mut countries = countries.clone();
-    countries.sort_by(|a, b| (b.area as usize).cmp(&(a.area as usize)));
+    countries.sort_by(|a, b| (a.area as usize).cmp(&(b.area as usize)));
     (countries.first().unwrap().to_owned(), countries.last().unwrap().to_owned())
+}
+
+pub fn get_visited_continents(countries: &Countries) -> Continents {
+    let continents     = countries.into_iter().flat_map(|country| country.continents.clone());
+    let mut continents = continents.fold(vec![], |continents, continent| {
+        let mut continents = continents.clone();
+        let current        = continents.clone().into_iter().find(|(x, _)| *x == continent);
+
+        match current {
+            Some((continent, count)) => {
+                let mut continents = continents.into_iter().filter(|(x, _)| *x != continent).collect::<Vec<_>>();
+                continents.push((continent, count + 1));
+                continents
+            },
+            None                     => {
+                continents.push((continent, 1));
+                continents
+            }
+        }
+    });
+
+    continents.sort_by(|(_, a), (_, b)| b.cmp(&a));
+    continents
 }
 
 #[cfg(test)]
@@ -77,7 +100,7 @@ mod tests {
     #[test]
     fn it_can_get_min_max_people_from_countries() {
         let (countries, france, _, greece) = get_mock_countries();
-        let (most_people, fewest_people)   = get_countries_by_people(&countries);
+        let (fewest_people, most_people)   = get_countries_by_people(&countries);
         assert_eq!(most_people, greece);
         assert_eq!(fewest_people, france);
     }
@@ -85,7 +108,7 @@ mod tests {
     #[test]
     fn it_can_get_min_max_land_from_countries() {
         let (countries, _, spain, greece) = get_mock_countries();
-        let (most_land, least_land)       = get_countries_by_land(&countries);
+        let (least_land, most_land)       = get_countries_by_land(&countries);
         assert_eq!(most_land, spain);
         assert_eq!(least_land, greece);
     }
@@ -96,5 +119,12 @@ mod tests {
         assert_eq!(write_countries_to_file(MOCK_FILENAME, countries.clone()), Some(()));
         assert_eq!(read_countries_from_file(MOCK_FILENAME, countries.clone()), countries.clone());
         remove_file(MOCK_FILENAME).ok();
+    }
+
+    #[test]
+    fn it_can_get_sorted_continents_from_countries() {
+        let (countries, _, _, _) = get_mock_countries();
+        let continents           = get_visited_continents(&countries);
+        assert_eq!(continents, vec![("Europe".to_string(), 3)]);
     }
 }

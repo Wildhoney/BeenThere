@@ -21,11 +21,11 @@ pub fn render(output: Output) -> () {
 }
 
 mod print {
-    use term_table::{Table, TableStyle, row::Row, table_cell::{TableCell, Alignment}};
+    use term_table::{Table, TableStyle, row::Row, table_cell::TableCell};
     use num_format::{Locale, ToFormattedString};
     use colored::*;
 
-    use crate::app::{types::{Countries, Country}, utils::{get_countries_by_people, get_countries_by_land}};
+    use crate::app::{types::{Countries, Country, Continents}, utils::{get_countries_by_people, get_countries_by_land, get_visited_continents}};
 
     pub fn list(countries: Countries) -> () {
         match countries.len() {
@@ -33,16 +33,21 @@ mod print {
             _ => {
                 println!("You have visited {} countries!\n", countries.len().to_string().bold().cyan());
     
-                let (most_people, fewest_people) = get_countries_by_people(&countries);
+                let (fewest_people, most_people) = get_countries_by_people(&countries);
                 people("Most".to_string(), most_people);
                 people("Fewest".to_string(), fewest_people);
                 println!("\n");
     
-                let (most_land, least_land) = get_countries_by_land(&countries);
+                let (least_land, most_land) = get_countries_by_land(&countries);
                 land("Most".to_string(), most_land);
                 land("Least".to_string(), least_land);
+
+                println!("\n");
+                continents(get_visited_continents(&countries));
+                println!("\n");
+
                 println!("\n{}:", "Countries".white());
-        
+
                 let mut countries = countries.clone();
                 countries.sort_by(|a, b| a.name.common.to_lowercase().cmp(&b.name.common.to_lowercase()));
     
@@ -52,7 +57,7 @@ mod print {
 
                 for countries in countries.chunks(4) {
                     let countries = countries.into_iter().map(|country| {
-                        TableCell::new_with_alignment(format!("{} {}  {}", "◦".dimmed(), country.flag, country.name.common), 2, Alignment::Left)
+                        TableCell::new(format!("{} {}  {}", "◦".dimmed(), country.flag, country.name.common))
                     }).collect::<Vec<_>>();
     
                     table.add_row(Row::new(countries));
@@ -79,6 +84,14 @@ mod print {
             (country.area as usize).to_formatted_string(&Locale::en).to_string().white(),
             "km2".dimmed()
         );
+    }
+
+    pub fn continents(continents: Continents) -> () {
+        print!("{} {}: ", "┃".dimmed(), "Continents".bold());
+
+        continents.into_iter().for_each(|(continent, count)| {
+            print!("{} {} {}{}{} ", "◦".dimmed(), continent, "(".dimmed(), count.to_string().white(), ")".dimmed());
+        });
     }
     
     pub fn added_or_removed(prefix: String, country: Country) -> () {

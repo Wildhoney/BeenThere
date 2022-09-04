@@ -8,6 +8,7 @@ pub struct Country {
     pub flag: String,
     pub population: usize,
     pub area: f64,
+    pub continents: Vec<String>,
 
     #[serde(rename(deserialize = "altSpellings"))]
     pub alt_spellings: Vec<String>
@@ -17,6 +18,8 @@ pub struct Country {
 pub struct Name {
     pub common: String
 }
+
+pub type Continents = Vec<(String, usize)>;
 
 #[derive(Debug, PartialEq)]
 pub enum Output {
