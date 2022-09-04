@@ -8,13 +8,13 @@ pub fn render(output: Output) -> () {
     println!("{}", standard_font.convert("BeenThere.").unwrap());
 
     match output {
-        Output::Add(country)    => print::added_or_removed("Added".to_string(), country),
-        Output::Remove(country) => print::added_or_removed("Removed".to_string(), country),
+        Output::Add(country)    => print::added_or_removed("Added", country),
+        Output::Remove(country) => print::added_or_removed("Removed", country),
         Output::List(countries) => print::list(countries),
-        Output::Invalid(name)   => print::error(format!("Invalid country: {}.", name.white())),
-        Output::Unwritable      => print::error(format!("Cannot write countries to: {}.", FILENAME.white())),
-        Output::Unfetchable     => print::error("Cannot fetch countries at the moment.".to_string()),
-        Output::Unactionable    => print::error(format!("Invalid command supplied, try: {}, {} or {}.", "add".white(), "rm".white(), "ls".white()))
+        Output::Invalid(name)   => print::error(&format!("Invalid country: {}.", name.white())),
+        Output::Unwritable      => print::error(&format!("Cannot write countries to: {}.", FILENAME.white())),
+        Output::Unfetchable     => print::error("Cannot fetch countries at the moment."),
+        Output::Unactionable    => print::error(&format!("Invalid command supplied, try: {}, {} or {}.", "add".white(), "rm".white(), "ls".white()))
     }
 
     println!("\n");
@@ -34,13 +34,13 @@ mod print {
                 println!("You have visited {} countries!\n", countries.len().to_string().bold().cyan());
     
                 let (fewest_people, most_people) = get_countries_by_people(&countries);
-                people("Most".to_string(), most_people);
-                people("Fewest".to_string(), fewest_people);
+                people("Most", most_people);
+                people("Fewest", fewest_people);
                 println!("\n");
     
                 let (least_land, most_land) = get_countries_by_land(&countries);
-                land("Most".to_string(), most_land);
-                land("Least".to_string(), least_land);
+                land("Most", most_land);
+                land("Least", least_land);
 
                 println!("\n");
                 continents(get_visited_continents(&countries));
@@ -68,20 +68,20 @@ mod print {
         }
     }
 
-    pub fn people(quantifier: String, country: Country) -> () {
+    pub fn people(quantifier: &str, country: Country) -> () {
         println!(
             "{} {} people: {} {}  ({} {})", "┃".dimmed(), quantifier.bold(),
             country.name.common.white(), country.flag,
-            country.population.to_formatted_string(&Locale::en).to_string().white(),
+            country.population.to_formatted_string(&Locale::en).white(),
             "ppl".dimmed()
         );
     }
     
-    pub fn land(quantifier: String, country: Country) -> () {
+    pub fn land(quantifier: &str, country: Country) -> () {
         println!(
             "{} {} land: {} {}  ({} {})", "┃".dimmed(), quantifier.bold(),
             country.name.common.white(), country.flag,
-            (country.area as usize).to_formatted_string(&Locale::en).to_string().white(),
+            (country.area as usize).to_formatted_string(&Locale::en).white(),
             "km2".dimmed()
         );
     }
@@ -94,16 +94,16 @@ mod print {
         });
     }
     
-    pub fn added_or_removed(prefix: String, country: Country) -> () {
+    pub fn added_or_removed(prefix: &str, country: Country) -> () {
         println!(
             "{} {} {}  which has a population of {} people {}",
             prefix, country.name.common.white(), country.flag,
-            country.population.to_formatted_string(&Locale::en).to_string().white(),
-            format!("within {} km2.", (country.area as usize).to_formatted_string(&Locale::en).to_string().white())
+            country.population.to_formatted_string(&Locale::en).white(),
+            format!("within {} km2.", (country.area as usize).to_formatted_string(&Locale::en).white())
         );
     }
     
-    pub fn error(message: String) -> () {
+    pub fn error(message: &str) -> () {
         println!("{}", "Oh no! An error has occurred...".bright_red().bold());
         println!("{}", message);
     }
