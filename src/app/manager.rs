@@ -12,7 +12,7 @@ pub fn add(filename: &str, country: &Country, countries: &Countries) -> Output {
 }
 
 pub fn remove(filename: &str, country: &Country, countries: &Countries) -> Output {
-    let countries = read_countries_from_file(filename, countries).into_iter().filter(|x| *x != *country).collect::<Countries>();
+    let countries = read_countries_from_file(filename, countries).into_iter().filter(|x| x != country).collect::<Countries>();
 
     match write_countries_to_file(filename, &countries) {
         Some(_) => Output::Remove(country.clone()),
