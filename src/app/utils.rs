@@ -14,8 +14,8 @@ pub async fn get_countries_from_remote() -> Option<Countries> {
     }
 }
 
-pub fn get_country_by_name(country: &String, countries: Countries) -> Option<Country> {
-    countries.into_iter().find(|x| {
+pub fn get_country_by_name(country: &String, countries: &Countries) -> Option<Country> {
+    countries.clone().into_iter().find(|x| {
         let name = country.to_lowercase();
         let is_name_matched = x.name.common.to_lowercase() == name;
         let alt_spellings = x.alt_spellings.clone().into_iter().map(|name| name.to_lowercase()).collect::<Vec<_>>();
@@ -25,15 +25,15 @@ pub fn get_country_by_name(country: &String, countries: Countries) -> Option<Cou
     })
 }
 
-pub fn read_countries_from_file(filename: &str, countries: Countries) -> Countries {
+pub fn read_countries_from_file(filename: &str, countries: &Countries) -> Countries {
     let mut buffer = fs::read_to_string(filename).unwrap_or_else(|_| "[]".to_string());
     let names = serde_json::from_str::<Vec<String>>(&mut buffer).unwrap_or_else(|_| vec![]);
-    countries.into_iter().filter_map(|country| names.contains(&country.name.common).then_some(country)).collect::<Countries>()
+    countries.clone().into_iter().filter_map(|country| names.contains(&country.name.common).then_some(country)).collect::<Countries>()
 }
 
-pub fn write_countries_to_file(filename: &str, countries: Countries) -> Option<()> {
+pub fn write_countries_to_file(filename: &str, countries: &Countries) -> Option<()> {
     let file = OpenOptions::new().write(true).read(true).create(true).truncate(true).open(filename);
-    let names = countries.into_iter().map(|country| country.name.common).unique().collect::<Vec<String>>();
+    let names = countries.into_iter().map(|country| country.name.common.clone()).unique().collect::<Vec<String>>();
 
     match file {
         Ok(mut file) => file.write_all(serde_json::to_string_pretty(&names).unwrap().as_bytes()).ok(),
@@ -88,13 +88,13 @@ mod tests {
     #[test]
     fn it_can_get_countries_by_name() {
         let (countries, _, spain, _) = get_mock_countries();
-        assert_eq!(get_country_by_name(&"spain".to_string(), countries), Some(spain));
+        assert_eq!(get_country_by_name(&"spain".to_string(), &countries), Some(spain));
     }
 
     #[test]
     fn it_can_get_countries_by_alt_spellings() {
         let (countries, france, _, _) = get_mock_countries();
-        assert_eq!(get_country_by_name(&"fr".to_string(), countries), Some(france));
+        assert_eq!(get_country_by_name(&"fr".to_string(), &countries), Some(france));
     }
 
     #[test]
@@ -116,8 +116,8 @@ mod tests {
     #[test]
     fn it_should_read_and_write_from_file() {
         let (countries, _, _, _) = get_mock_countries();
-        assert_eq!(write_countries_to_file(MOCK_FILENAME, countries.clone()), Some(()));
-        assert_eq!(read_countries_from_file(MOCK_FILENAME, countries.clone()), countries.clone());
+        assert_eq!(write_countries_to_file(MOCK_FILENAME, &countries), Some(()));
+        assert_eq!(read_countries_from_file(MOCK_FILENAME, &countries), countries.clone());
         remove_file(MOCK_FILENAME).ok();
     }
 

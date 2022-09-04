@@ -11,20 +11,20 @@ pub async fn run() -> Output {
             match get_args().get_matches().subcommand() {
                 Some((action @ "add", arg)) | Some((action @ "rm", arg)) => {
                     let name    = arg.get_one::<String>("NAME").unwrap();
-                    let country = crate::app::utils::get_country_by_name(name, countries.clone());
+                    let country = crate::app::utils::get_country_by_name(name, &countries);
         
                     match country {
                         Some(country) => {
                             match action {
-                                "add" => add(FILENAME, country, countries.clone()),
-                                "rm"  => remove(FILENAME, country, countries.clone()),
+                                "add" => add(FILENAME, country, &countries),
+                                "rm"  => remove(FILENAME, country, &countries),
                                 _     => Output::Unactionable
                             }
                         },
                         None => Output::Invalid(name.to_string())
                     }
                 },
-                Some(("ls", _)) => list(FILENAME, countries.clone()),
+                Some(("ls", _)) => list(FILENAME, &countries),
                 _               => Output::Unactionable
             }
         },
