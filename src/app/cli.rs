@@ -16,8 +16,8 @@ pub async fn run() -> Output {
                     match country {
                         Some(country) => {
                             match action {
-                                "add" => add(FILENAME, country, &countries),
-                                "rm"  => remove(FILENAME, country, &countries),
+                                "add" => add(FILENAME, &country, &countries),
+                                "rm"  => remove(FILENAME, &country, &countries),
                                 _     => Output::Unactionable
                             }
                         },
