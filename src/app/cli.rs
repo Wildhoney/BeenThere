@@ -3,6 +3,8 @@ use clap::{arg, Command};
 use crate::app::types::Output;
 use crate::app::manager::{add, remove, list};
 
+pub const FILENAME: &str = "been-there.json";
+
 pub async fn run() -> Output {
     match crate::app::utils::get_countries_from_remote().await {
         Some(countries) => {
@@ -14,15 +16,15 @@ pub async fn run() -> Output {
                     match country {
                         Some(country) => {
                             match action {
-                                "add" => add(country, countries.clone()),
-                                "rm"  => remove(country, countries.clone()),
+                                "add" => add(FILENAME, country, countries.clone()),
+                                "rm"  => remove(FILENAME, country, countries.clone()),
                                 _     => Output::Unactionable
                             }
                         },
                         None => Output::Invalid(name.to_string())
                     }
                 },
-                Some(("ls", _)) => list(countries.clone()),
+                Some(("ls", _)) => list(FILENAME, countries.clone()),
                 _               => Output::Unactionable
             }
         },

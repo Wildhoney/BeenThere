@@ -18,7 +18,7 @@ pub struct Name {
     pub common: String
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Output {
     Add(Country),
     Remove(Country),

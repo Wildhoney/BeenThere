@@ -5,4 +5,4 @@ build:
 
 test:
 	cargo test
-	rm -f ./been-there.mock.json
+	rm -f ./been-there.utils.mock.json ./been-there.manager.mock.json

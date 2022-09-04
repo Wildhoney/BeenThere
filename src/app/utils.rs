@@ -5,8 +5,6 @@ use itertools::Itertools;
 
 use crate::app::types::{Countries, Country};
 
-pub const FILENAME: &str = "been-there.json";
-
 const COUNTRY_URL: &str = "https://restcountries.com/v3.1/all";
 
 pub async fn get_countries_from_remote() -> Option<Countries> {
@@ -62,7 +60,7 @@ mod tests {
     use super::*;
     use crate::app::mocks::get_mock_countries;
 
-    const MOCK_FILENAME: &str = "been-there.mock.json";
+    pub const MOCK_FILENAME: &str = "been-there.utils.mock.json";
 
     #[test]
     fn it_can_get_countries_by_name() {

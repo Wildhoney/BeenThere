@@ -1,7 +1,7 @@
 use figlet_rs::FIGfont;
 use colored::*;
 
-use crate::app::{types::{Output}, utils::{FILENAME}};
+use crate::app::{types::{Output}, cli::FILENAME};
 
 pub fn render(output: Output) -> () {
     let standard_font = FIGfont::standand().unwrap();
