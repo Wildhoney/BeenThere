@@ -14,7 +14,7 @@ pub struct Country {
     pub alt_spellings: Vec<String>
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct Name {
     pub common: String
 }

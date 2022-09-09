@@ -3,7 +3,7 @@ use colored::*;
 
 use crate::app::{types::{Output}, cli::FILENAME};
 
-pub fn render(output: Output) -> () {
+pub fn render(output: Output) {
     let standard_font = FIGfont::standand().unwrap();
     println!("{}", standard_font.convert("BeenThere.").unwrap());
 
@@ -27,23 +27,23 @@ mod print {
 
     use crate::app::{types::{Countries, Country, Continents}, utils::{get_countries_by_people, get_countries_by_land, get_visited_continents}};
 
-    pub fn list(countries: &Countries) -> () {
+    pub fn list(countries: &Countries) {
         match countries.len() {
             0 => println!("You haven't yet been to {} countries! {}", "any".bold(), "Not even your home country...".white()),
             _ => {
                 println!("You have visited {} countries!\n", countries.len().to_string().bold().cyan());
     
-                let (fewest_people, most_people) = get_countries_by_people(&countries);
+                let (fewest_people, most_people) = get_countries_by_people(countries);
                 people("Most", &most_people);
                 people("Fewest", &fewest_people);
                 println!("\n");
     
-                let (least_land, most_land) = get_countries_by_land(&countries);
+                let (least_land, most_land) = get_countries_by_land(countries);
                 land("Most", &most_land);
                 land("Least", &least_land);
 
                 println!("\n");
-                continents(get_visited_continents(&countries));
+                continents(get_visited_continents(countries));
                 println!("\n");
 
                 println!("\n{}:", "Countries".white());
@@ -56,7 +56,7 @@ mod print {
                 table.style         = TableStyle::blank(); 
 
                 for countries in countries.chunks(4) {
-                    let countries = countries.into_iter().map(|country| {
+                    let countries = countries.iter().map(|country| {
                         TableCell::new(format!("{} {}  {}", "◦".dimmed(), country.flag, country.name.common))
                     }).collect::<Vec<_>>();
     
@@ -68,7 +68,7 @@ mod print {
         }
     }
 
-    pub fn people(quantifier: &str, country: &Country) -> () {
+    pub fn people(quantifier: &str, country: &Country) {
         println!(
             "{} {} people: {} {}  ({} {})", "┃".dimmed(), quantifier.bold(),
             country.name.common.white(), country.flag,
@@ -77,7 +77,7 @@ mod print {
         );
     }
     
-    pub fn land(quantifier: &str, country: &Country) -> () {
+    pub fn land(quantifier: &str, country: &Country) {
         println!(
             "{} {} land: {} {}  ({} {})", "┃".dimmed(), quantifier.bold(),
             country.name.common.white(), country.flag,
@@ -86,7 +86,7 @@ mod print {
         );
     }
 
-    pub fn continents(continents: Continents) -> () {
+    pub fn continents(continents: Continents) {
         print!("{} {}: ", "┃".dimmed(), "Continents".bold());
 
         continents.into_iter().for_each(|(continent, count)| {
@@ -94,16 +94,16 @@ mod print {
         });
     }
     
-    pub fn added_or_removed(prefix: &str, country: &Country) -> () {
+    pub fn added_or_removed(prefix: &str, country: &Country) {
         println!(
-            "{} {} {}  which has a population of {} people {}",
+            "{} {} {}  which has a population of {} people within {} km2.",
             prefix, country.name.common.white(), country.flag,
             country.population.to_formatted_string(&Locale::en).white(),
-            format!("within {} km2.", (country.area as usize).to_formatted_string(&Locale::en).white())
+            (country.area as usize).to_formatted_string(&Locale::en).white()
         );
     }
     
-    pub fn error(message: &str) -> () {
+    pub fn error(message: &str) {
         println!("{}", "Oh no! An error has occurred...".bright_red().bold());
         println!("{}", message);
     }

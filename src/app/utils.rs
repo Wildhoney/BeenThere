@@ -14,26 +14,26 @@ pub async fn get_countries_from_remote() -> Option<Countries> {
     }
 }
 
-pub fn get_country_by_name(country: &String, countries: &Countries) -> Option<Country> {
+pub fn get_country_by_name(country: &str, countries: &Countries) -> Option<Country> {
     countries.clone().into_iter().find(|x| {
-        let name = country.to_lowercase();
-        let is_name_matched = x.name.common.to_lowercase() == name;
-        let alt_spellings = x.alt_spellings.clone().into_iter().map(|name| name.to_lowercase()).collect::<Vec<_>>();
-        let is_alt_spellings_matched = alt_spellings.contains(&name);
+        let name                     = country.to_lowercase();
+        let is_name_matched          = x.name.common.to_lowercase() == name;
+        let mut alt_spellings        = x.alt_spellings.clone().into_iter().map(|name| name.to_lowercase());
+        let is_alt_spellings_matched = alt_spellings.any(|x| x == name);
 
         is_name_matched || is_alt_spellings_matched
     })
 }
 
 pub fn read_countries_from_file(filename: &str, countries: &Countries) -> Countries {
-    let mut buffer = fs::read_to_string(filename).unwrap_or_else(|_| "[]".to_string());
-    let names = serde_json::from_str::<Vec<String>>(&mut buffer).unwrap_or_else(|_| vec![]);
+    let buffer = fs::read_to_string(filename).unwrap_or_else(|_| "[]".to_string());
+    let names = serde_json::from_str::<Vec<String>>(&buffer).unwrap_or_else(|_| vec![]);
     countries.clone().into_iter().filter_map(|country| names.contains(&country.name.common).then_some(country)).collect::<Countries>()
 }
 
 pub fn write_countries_to_file(filename: &str, countries: &Countries) -> Option<()> {
     let file = OpenOptions::new().write(true).read(true).create(true).truncate(true).open(filename);
-    let names = countries.into_iter().map(|country| country.name.common.clone()).unique().collect::<Vec<String>>();
+    let names = countries.iter().map(|country| country.name.common.clone()).unique().collect::<Vec<String>>();
 
     match file {
         Ok(mut file) => file.write_all(serde_json::to_string_pretty(&names).unwrap().as_bytes()).ok(),
@@ -54,10 +54,9 @@ pub fn get_countries_by_land(countries: &Countries) -> (Country, Country) {
 }
 
 pub fn get_visited_continents(countries: &Countries) -> Continents {
-    let continents     = countries.into_iter().flat_map(|country| country.continents.clone());
-    let mut continents = continents.fold(vec![], |continents, continent| {
-        let mut continents = continents.clone();
-        let current        = continents.clone().into_iter().find(|(x, _)| *x == continent);
+    let continents     = countries.iter().flat_map(|country| country.continents.clone());
+    let mut continents = continents.fold(vec![], |mut continents, continent| {
+        let current = continents.clone().into_iter().find(|(x, _)| *x == continent);
 
         match current {
             Some((continent, count)) => {
@@ -72,7 +71,7 @@ pub fn get_visited_continents(countries: &Countries) -> Continents {
         }
     });
 
-    continents.sort_by(|(_, a), (_, b)| b.cmp(&a));
+    continents.sort_by(|(_, a), (_, b)| b.cmp(a));
     continents
 }
 
