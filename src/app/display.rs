@@ -1,7 +1,10 @@
 use colored::*;
 use figlet_rs::FIGfont;
 
-use crate::app::{cli::FILENAME, types::Output};
+use crate::app::{
+    cli::{CMD_ADD, CMD_LIST, CMD_REMOVE, FILENAME},
+    types::Output,
+};
 
 pub fn render(output: Output) {
     let standard_font = FIGfont::standard().unwrap();
@@ -18,9 +21,9 @@ pub fn render(output: Output) {
         Output::Unfetchable => print::error("Cannot fetch countries at the moment."),
         Output::Unactionable => print::error(&format!(
             "Invalid command supplied, try: {}, {} or {}.",
-            "add".white(),
-            "rm".white(),
-            "ls".white()
+            CMD_ADD.white(),
+            CMD_REMOVE.white(),
+            CMD_LIST.white()
         )),
     }
 
