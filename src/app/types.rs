@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 pub type Countries = Vec<Country>;
 
@@ -11,12 +11,12 @@ pub struct Country {
     pub continents: Vec<String>,
 
     #[serde(rename(deserialize = "altSpellings"))]
-    pub alt_spellings: Vec<String>
+    pub alt_spellings: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct Name {
-    pub common: String
+    pub common: String,
 }
 
 pub type Continents = Vec<(String, usize)>;
@@ -29,5 +29,5 @@ pub enum Output {
     Invalid(String),
     Unwritable,
     Unfetchable,
-    Unactionable
+    Unactionable,
 }

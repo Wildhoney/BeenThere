@@ -1,10 +1,10 @@
 mod app {
     pub mod cli;
-    pub mod manager;
-    pub mod utils;
-    pub mod types;
     pub mod display;
+    pub mod manager;
     pub mod mocks;
+    pub mod types;
+    pub mod utils;
 }
 
 #[tokio::main]
