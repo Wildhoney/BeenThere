@@ -4,7 +4,7 @@ use colored::*;
 use crate::app::{types::{Output}, cli::FILENAME};
 
 pub fn render(output: Output) {
-    let standard_font = FIGfont::standand().unwrap();
+    let standard_font = FIGfont::standard().unwrap();
     println!("{}", standard_font.convert("BeenThere.").unwrap());
 
     match output {
