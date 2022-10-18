@@ -48,12 +48,14 @@ pub fn get_args() -> Command<'static> {
         )
         .subcommand(
             Command::new(CMD_REMOVE)
+                .alias("rm")
                 .about("Remove a country from your list")
                 .arg(arg!(<NAME> "Name of the country"))
                 .arg_required_else_help(true),
         )
         .subcommand(
             Command::new(CMD_LIST)
+                .alias("ls")
                 .about("List out all of the countries you have visited")
         )
 }
