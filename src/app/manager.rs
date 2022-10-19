@@ -1,6 +1,9 @@
 use crate::app::types::{Countries, Country, Output};
 use crate::app::utils::{read_countries_from_file, write_countries_to_file};
 
+use super::types::Stats;
+use super::utils::has_visited_country;
+
 pub fn add(filename: &str, country: &Country, countries: &Countries) -> Output {
     let mut countries = read_countries_from_file(filename, countries);
     countries.push(country.clone());
@@ -27,8 +30,11 @@ pub fn list(filename: &str, countries: &Countries) -> Output {
     Output::List(read_countries_from_file(filename, countries))
 }
 
-pub fn info(country: &Country, _countries: &Countries) -> Output {
-    Output::Info(country.clone())
+pub fn info(filename: &str, country: &Country, countries: &Countries) -> Output {
+    Output::Info(Stats {
+        country: country.to_owned(),
+        has_visited: has_visited_country(filename, country, countries),
+    })
 }
 
 #[cfg(test)]

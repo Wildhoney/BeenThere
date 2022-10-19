@@ -32,6 +32,7 @@ pub fn get_country_by_name(country: &str, countries: &Countries) -> Option<Count
 pub fn read_countries_from_file(filename: &str, countries: &Countries) -> Countries {
     let buffer = fs::read_to_string(filename).unwrap_or_else(|_| "[]".to_string());
     let names = serde_json::from_str::<Vec<String>>(&buffer).unwrap_or_else(|_| vec![]);
+
     countries
         .clone()
         .into_iter()
@@ -58,6 +59,11 @@ pub fn write_countries_to_file(filename: &str, countries: &Countries) -> Option<
             .ok(),
         Err(_) => None,
     }
+}
+
+pub fn has_visited_country(filename: &str, country: &Country, countries: &Countries) -> bool {
+    let countries = read_countries_from_file(filename, &countries);
+    countries.contains(country)
 }
 
 pub fn get_countries_by_people(countries: &Countries) -> (Country, Country) {
@@ -113,7 +119,7 @@ mod tests {
     use std::fs::remove_file;
 
     use super::*;
-    use crate::app::mocks::get_mock_countries;
+    use crate::app::{manager::add, mocks::get_mock_countries};
 
     pub const MOCK_FILENAME: &str = "been-there.utils.mock.json";
 
@@ -159,6 +165,7 @@ mod tests {
             read_countries_from_file(MOCK_FILENAME, &countries),
             countries.clone()
         );
+
         remove_file(MOCK_FILENAME).ok();
     }
 
@@ -167,5 +174,21 @@ mod tests {
         let (countries, _, _, _) = get_mock_countries();
         let continents = get_visited_continents(&countries);
         assert_eq!(continents, vec![("Europe".to_string(), 3)]);
+    }
+
+    #[test]
+    fn it_should_know_if_weve_visited_a_country() {
+        let (countries, france, _, _) = get_mock_countries();
+        assert_eq!(
+            has_visited_country(MOCK_FILENAME, &france, &countries),
+            false
+        );
+        add(MOCK_FILENAME, &france, &countries);
+        assert_eq!(
+            has_visited_country(MOCK_FILENAME, &france, &countries),
+            true
+        );
+
+        remove_file(MOCK_FILENAME).ok();
     }
 }

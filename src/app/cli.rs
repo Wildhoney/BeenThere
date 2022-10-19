@@ -26,7 +26,7 @@ pub async fn run() -> Output {
                     Some(country) => match action {
                         CMD_ADD => add(FILENAME, &country, &countries),
                         CMD_REMOVE => remove(FILENAME, &country, &countries),
-                        CMD_INFO => info(&country, &countries),
+                        CMD_INFO => info(FILENAME, &country, &countries),
                         _ => Output::Unactionable,
                     },
                     None => Output::Invalid(name.to_string()),

@@ -33,12 +33,18 @@ pub struct Maps {
     pub google_maps: String,
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct Stats {
+    pub country: Country,
+    pub has_visited: bool,
+}
+
 #[derive(Debug, PartialEq)]
 pub enum Output {
     Add(Country),
     Remove(Country),
     List(Countries),
-    Info(Country),
+    Info(Stats),
     Invalid(String),
     Unwritable,
     Unfetchable,

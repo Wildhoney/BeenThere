@@ -14,7 +14,7 @@ pub fn render(output: Output) {
         Output::Add(country) => print::added_or_removed("Added", &country),
         Output::Remove(country) => print::added_or_removed("Removed", &country),
         Output::List(countries) => print::list(&countries),
-        Output::Info(country) => print::info(&country),
+        Output::Info(stats) => print::info(&stats),
         Output::Invalid(name) => print::error(&format!("Invalid country: {}.", name.white())),
         Output::Unwritable => {
             print::error(&format!("Cannot write countries to: {}.", FILENAME.white()))
@@ -38,7 +38,7 @@ mod print {
     use term_table::{row::Row, table_cell::TableCell, Table, TableStyle};
 
     use crate::app::{
-        types::{Continents, Countries, Country},
+        types::{Continents, Countries, Country, Stats},
         utils::{get_countries_by_land, get_countries_by_people, get_visited_continents},
     };
 
@@ -157,34 +157,41 @@ mod print {
         );
     }
 
-    pub fn info(country: &Country) {
-        let name = &country.name.common.bold();
-        let flag = &country.flag;
+    pub fn info(stats: &Stats) {
+        let name = &stats.country.name.common.bold();
+        let flag = &stats.country.flag;
         let dimmed = "┃".dimmed();
-
         println!("{flag}  {name}\n");
-        let visited = format!(
-            "Unfortunately you have not yet never visited {}.",
-            &country.name.common
-        )
-        .cyan();
-        println!("{}\n", visited);
+
+        let visited = if stats.has_visited {
+            format!(
+                "You're lucky enough to have visited {} already!",
+                &stats.country.name.common
+            )
+        } else {
+            format!(
+                "Unfortunately you have not yet never visited {}.",
+                &stats.country.name.common
+            )
+        };
+
+        println!("{}\n", visited.cyan());
 
         let label = "Population:".white();
-        let value = country.population.to_formatted_string(&Locale::en);
+        let value = stats.country.population.to_formatted_string(&Locale::en);
         let suffix = "ppl".dimmed();
         println!("{dimmed} {label} {value} {suffix}");
 
         let label = "Area:".white();
-        let value = (country.area as usize).to_formatted_string(&Locale::en);
+        let value = (stats.country.area as usize).to_formatted_string(&Locale::en);
         let suffix = "km2".dimmed();
         println!("{dimmed} {label} {value} {suffix}");
 
         let label = "Continent(s):".white();
-        let value = country.continents.iter().join(",");
+        let value = stats.country.continents.iter().join(",");
         println!("{dimmed} {label} {value}");
 
-        if let Some(latlng) = &country.latlng {
+        if let Some(latlng) = &stats.country.latlng {
             let label = "Lat/Lng:".white();
             let values = latlng
                 .iter()
@@ -197,19 +204,19 @@ mod print {
                 values[1],
                 "°S".dimmed()
             );
-            let url = format!("({})", &country.maps.google_maps)
+            let url = format!("({})", &stats.country.maps.google_maps)
                 .dimmed()
                 .underline();
             println!("{dimmed} {label} {value} {url}");
         }
 
-        if let Some(languages) = &country.languages {
+        if let Some(languages) = &stats.country.languages {
             let label = "Language(s):".white();
             let value = languages.values().join(", ");
             println!("{dimmed} {label} {value}");
         }
 
-        if let Some(country) = &country.tld {
+        if let Some(country) = &stats.country.tld {
             let label = "TLD(s):".white();
             let value = country.iter().join(", ");
             println!("{dimmed} {label} {value}");
