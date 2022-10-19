@@ -1,7 +1,7 @@
 use itertools::Itertools;
-use std::fs;
 use std::fs::OpenOptions;
 use std::io::prelude::*;
+use std::{fs, vec};
 
 use crate::app::types::{Continents, Countries, Country};
 

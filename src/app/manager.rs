@@ -27,6 +27,10 @@ pub fn list(filename: &str, countries: &Countries) -> Output {
     Output::List(read_countries_from_file(filename, countries))
 }
 
+pub fn info(country: &Country, _countries: &Countries) -> Output {
+    Output::Info(country.clone())
+}
+
 #[cfg(test)]
 mod tests {
     use std::fs::remove_file;

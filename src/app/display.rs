@@ -14,6 +14,7 @@ pub fn render(output: Output) {
         Output::Add(country) => print::added_or_removed("Added", &country),
         Output::Remove(country) => print::added_or_removed("Removed", &country),
         Output::List(countries) => print::list(&countries),
+        Output::Info(country) => print::info(&country),
         Output::Invalid(name) => print::error(&format!("Invalid country: {}.", name.white())),
         Output::Unwritable => {
             print::error(&format!("Cannot write countries to: {}.", FILENAME.white()))
@@ -31,7 +32,10 @@ pub fn render(output: Output) {
 }
 
 mod print {
+    use std::fmt::format;
+
     use colored::*;
+    use itertools::Itertools;
     use num_format::{Locale, ToFormattedString};
     use term_table::{row::Row, table_cell::TableCell, Table, TableStyle};
 
@@ -155,8 +159,60 @@ mod print {
         );
     }
 
+    pub fn info(country: &Country) {
+        let name = &country.name.common.bold();
+        let flag = &country.flag;
+        let dimmed = "┃".dimmed();
+
+        println!("{flag}  {name}\n");
+        let visited = format!(
+            "Unfortunately you have not yet never visited {}.",
+            &country.name.common
+        )
+        .cyan();
+        println!("{}\n", visited);
+
+        let label = "Population:".white();
+        let value = country.population.to_formatted_string(&Locale::en);
+        let suffix = "ppl".dimmed();
+        println!("{dimmed} {label} {value} {suffix}");
+
+        let label = "Area:".white();
+        let value = (country.area as usize).to_formatted_string(&Locale::en);
+        let suffix = "km2".dimmed();
+        println!("{dimmed} {label} {value} {suffix}");
+
+        let label = "Continent(s):".white();
+        let value = country.continents.iter().join(",");
+        println!("{dimmed} {label} {value}");
+
+        if let Some(latlng) = &country.latlng {
+            let label = "Lat/Lng:".white();
+            let values = latlng.iter().map(|latlng| latlng.to_string()).collect::<Vec<_>>();
+            let value = format!("{}{}, {}{}", values[0], "°N".dimmed(), values[1], "°S".dimmed());
+            let url = format!("({})", &country.maps.google_maps)
+                .dimmed()
+                .underline();
+            println!("{dimmed} {label} {value} {url}");
+        }
+
+        // let label = "Language(s):".white();
+        // println!("{dimmed} {label}");
+
+        if let Some(country) = &country.tld {
+            let label = "TLD(s):".white();
+            let value = country.iter().join(", ");
+            println!("{dimmed} {label} {value}");
+        }
+    }
+
     pub fn error(message: &str) {
-        println!("{}", "Oh no! An error has occurred...".bright_red().bold());
+        println!(
+            "{}",
+            "Oh no! An error has occurred...\n".bright_red().bold()
+        );
         println!("{}", message);
     }
 }
+
+// LatLng, Borders, Language

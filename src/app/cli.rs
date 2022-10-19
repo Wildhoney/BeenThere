@@ -1,6 +1,6 @@
 use clap::{arg, Command};
 
-use crate::app::manager::{add, list, remove};
+use crate::app::manager::{add, info, list, remove};
 use crate::app::types::Output;
 
 pub const FILENAME: &str = "been-there.json";
@@ -11,10 +11,14 @@ pub const CMD_REMOVE: &str = "remove";
 
 pub const CMD_LIST: &str = "list";
 
+pub const CMD_INFO: &str = "info";
+
 pub async fn run() -> Output {
     match crate::app::utils::get_countries_from_remote().await {
         Some(countries) => match get_args().get_matches().subcommand() {
-            Some((action @ CMD_ADD, arg)) | Some((action @ CMD_REMOVE, arg)) => {
+            Some((action @ CMD_ADD, arg))
+            | Some((action @ CMD_REMOVE, arg))
+            | Some((action @ CMD_INFO, arg)) => {
                 let name = arg.get_one::<String>("NAME").unwrap();
                 let country = crate::app::utils::get_country_by_name(name, &countries);
 
@@ -22,6 +26,7 @@ pub async fn run() -> Output {
                     Some(country) => match action {
                         CMD_ADD => add(FILENAME, &country, &countries),
                         CMD_REMOVE => remove(FILENAME, &country, &countries),
+                        CMD_INFO => info(&country, &countries),
                         _ => Output::Unactionable,
                     },
                     None => Output::Invalid(name.to_string()),
@@ -57,5 +62,12 @@ pub fn get_args() -> Command<'static> {
             Command::new(CMD_LIST)
                 .alias("ls")
                 .about("List out all of the countries you have visited")
+        )
+        .subcommand(
+            Command::new(CMD_INFO)
+                .alias("i")
+                .about("Display information about a particular country")
+                .arg(arg!(<NAME> "Name of the country"))
+                .arg_required_else_help(true),
         )
 }
