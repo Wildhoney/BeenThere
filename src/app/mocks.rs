@@ -21,6 +21,8 @@ pub fn get_mock_countries() -> (Countries, Country, Country, Country) {
             google_maps: "https://www.google.com/".to_string(),
         },
         languages: Some(HashMap::new()),
+        borders: Some(vec!["SPA".to_string()]),
+        cca3: "FRA".to_string(),
     };
 
     let spain = Country {
@@ -38,6 +40,8 @@ pub fn get_mock_countries() -> (Countries, Country, Country, Country) {
             google_maps: "https://www.google.com/".to_string(),
         },
         languages: Some(HashMap::new()),
+        borders: Some(vec!["FRA".to_string()]),
+        cca3: "SPA".to_string(),
     };
 
     let greece = Country {
@@ -55,6 +59,8 @@ pub fn get_mock_countries() -> (Countries, Country, Country, Country) {
             google_maps: "https://www.google.com/".to_string(),
         },
         languages: Some(HashMap::new()),
+        borders: Some(vec![]),
+        cca3: "GRE".to_string(),
     };
 
     (

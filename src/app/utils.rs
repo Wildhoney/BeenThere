@@ -18,6 +18,7 @@ pub fn get_country_by_name(country: &str, countries: &Countries) -> Option<Count
     countries.clone().into_iter().find(|x| {
         let name = country.to_lowercase();
         let is_name_matched = x.name.common.to_lowercase() == name;
+        let is_cca3_matched = x.cca3.to_lowercase() == name;
         let mut alt_spellings = x
             .alt_spellings
             .clone()
@@ -25,7 +26,7 @@ pub fn get_country_by_name(country: &str, countries: &Countries) -> Option<Count
             .map(|name| name.to_lowercase());
         let is_alt_spellings_matched = alt_spellings.any(|x| x == name);
 
-        is_name_matched || is_alt_spellings_matched
+        is_name_matched || is_cca3_matched || is_alt_spellings_matched
     })
 }
 
@@ -114,6 +115,16 @@ pub fn get_visited_continents(countries: &Countries) -> Continents {
     continents
 }
 
+pub fn find_neighbouring_countries_by_cca3<'a>(
+    cca3: &Vec<String>,
+    countries: &'a Countries,
+) -> Vec<&'a Country> {
+    countries
+        .into_iter()
+        .filter(|country| cca3.contains(&country.cca3))
+        .collect::<Vec<_>>()
+}
+
 #[cfg(test)]
 mod tests {
     use std::fs::remove_file;
@@ -126,6 +137,7 @@ mod tests {
     #[test]
     fn it_can_get_countries_by_name() {
         let (countries, _, spain, _) = get_mock_countries();
+
         assert_eq!(
             get_country_by_name(&"spain".to_string(), &countries),
             Some(spain)
@@ -135,6 +147,7 @@ mod tests {
     #[test]
     fn it_can_get_countries_by_alt_spellings() {
         let (countries, france, _, _) = get_mock_countries();
+
         assert_eq!(
             get_country_by_name(&"fr".to_string(), &countries),
             Some(france)
@@ -142,8 +155,19 @@ mod tests {
     }
 
     #[test]
+    fn it_can_get_countries_by_cca3() {
+        let (countries, france, _, _) = get_mock_countries();
+
+        assert_eq!(
+            get_country_by_name(&"FRA".to_string(), &countries),
+            Some(france)
+        );
+    }
+
+    #[test]
     fn it_can_get_min_max_people_from_countries() {
         let (countries, france, _, greece) = get_mock_countries();
+
         let (fewest_people, most_people) = get_countries_by_people(&countries);
         assert_eq!(most_people, greece);
         assert_eq!(fewest_people, france);
@@ -152,6 +176,7 @@ mod tests {
     #[test]
     fn it_can_get_min_max_land_from_countries() {
         let (countries, _, spain, greece) = get_mock_countries();
+
         let (least_land, most_land) = get_countries_by_land(&countries);
         assert_eq!(most_land, spain);
         assert_eq!(least_land, greece);
@@ -160,6 +185,7 @@ mod tests {
     #[test]
     fn it_should_read_and_write_from_file() {
         let (countries, _, _, _) = get_mock_countries();
+
         assert_eq!(write_countries_to_file(MOCK_FILENAME, &countries), Some(()));
         assert_eq!(
             read_countries_from_file(MOCK_FILENAME, &countries),
@@ -172,6 +198,7 @@ mod tests {
     #[test]
     fn it_can_get_sorted_continents_from_countries() {
         let (countries, _, _, _) = get_mock_countries();
+
         let continents = get_visited_continents(&countries);
         assert_eq!(continents, vec![("Europe".to_string(), 3)]);
     }
@@ -179,6 +206,7 @@ mod tests {
     #[test]
     fn it_should_know_if_weve_visited_a_country() {
         let (countries, france, _, _) = get_mock_countries();
+
         assert_eq!(
             has_visited_country(MOCK_FILENAME, &france, &countries),
             false
@@ -190,5 +218,18 @@ mod tests {
         );
 
         remove_file(MOCK_FILENAME).ok();
+    }
+
+    #[test]
+    fn it_should_resolve_neighbouring_countries() {
+        let (countries, france, _, greece) = get_mock_countries();
+
+        assert_eq!(
+            find_neighbouring_countries_by_cca3(
+                &vec!["FRA".to_string(), "GRE".to_string()],
+                &countries
+            ),
+            vec![&france, &greece]
+        );
     }
 }

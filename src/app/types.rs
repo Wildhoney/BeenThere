@@ -7,6 +7,7 @@ pub type Countries = Vec<Country>;
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Country {
     pub name: Name,
+    pub cca3: String,
     pub flag: String,
     pub population: usize,
     pub area: f64,
@@ -15,6 +16,7 @@ pub struct Country {
     pub latlng: Option<Vec<f64>>,
     pub maps: Maps,
     pub languages: Option<HashMap<String, String>>,
+    pub borders: Option<Vec<String>>,
 
     #[serde(rename(deserialize = "altSpellings"))]
     pub alt_spellings: Vec<String>,
@@ -36,6 +38,7 @@ pub struct Maps {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Stats {
     pub country: Country,
+    pub countries: Countries,
     pub has_visited: bool,
 }
 

@@ -2,7 +2,7 @@ use colored::*;
 use figlet_rs::FIGfont;
 
 use crate::app::{
-    cli::{CMD_ADD, CMD_LIST, CMD_REMOVE, FILENAME},
+    cli::{CMD_ADD, CMD_INFO, CMD_LIST, CMD_REMOVE, FILENAME},
     types::Output,
 };
 
@@ -21,10 +21,11 @@ pub fn render(output: Output) {
         }
         Output::Unfetchable => print::error("Cannot fetch countries at the moment."),
         Output::Unactionable => print::error(&format!(
-            "Invalid command supplied, try: {}, {} or {}.",
+            "Invalid command supplied, try: {}, {}, {} or {}.",
             CMD_ADD.white(),
             CMD_REMOVE.white(),
-            CMD_LIST.white()
+            CMD_LIST.white(),
+            CMD_INFO.white(),
         )),
     }
 
@@ -39,7 +40,10 @@ mod print {
 
     use crate::app::{
         types::{Continents, Countries, Country, Stats},
-        utils::{get_countries_by_land, get_countries_by_people, get_visited_continents},
+        utils::{
+            find_neighbouring_countries_by_cca3, get_countries_by_land, get_countries_by_people,
+            get_visited_continents,
+        },
     };
 
     pub fn list(countries: &Countries) {
@@ -204,9 +208,8 @@ mod print {
                 values[1],
                 "°S".dimmed()
             );
-            let url = format!("({})", &stats.country.maps.google_maps)
-                .dimmed()
-                .underline();
+            let url =
+                format!("({})", &stats.country.maps.google_maps.dimmed().underline()).dimmed();
             println!("{dimmed} {label} {value} {url}");
         }
 
@@ -221,6 +224,36 @@ mod print {
             let value = country.iter().join(", ");
             println!("{dimmed} {label} {value}");
         }
+
+        if let Some(borders) = &stats.country.borders {
+            if borders.len() > 0 {
+                println!("\nNeighbours:");
+
+                let mut table = Table::new();
+                table.separate_rows = false;
+                table.style = TableStyle::blank();
+
+                for countries in
+                    find_neighbouring_countries_by_cca3(borders, &stats.countries).chunks(4)
+                {
+                    let countries = countries
+                        .iter()
+                        .map(|country| {
+                            TableCell::new(format!(
+                                "{} {}  {}",
+                                "◦".dimmed(),
+                                country.flag,
+                                country.name.common
+                            ))
+                        })
+                        .collect::<Vec<_>>();
+
+                    table.add_row(Row::new(countries));
+                }
+
+                println!("{}", table.render());
+            }
+        }
     }
 
     pub fn error(message: &str) {
@@ -231,5 +264,3 @@ mod print {
         println!("{}", message);
     }
 }
-
-// LatLng, Borders, Language

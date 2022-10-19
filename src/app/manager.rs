@@ -33,6 +33,7 @@ pub fn list(filename: &str, countries: &Countries) -> Output {
 pub fn info(filename: &str, country: &Country, countries: &Countries) -> Output {
     Output::Info(Stats {
         country: country.to_owned(),
+        countries: countries.to_owned(),
         has_visited: has_visited_country(filename, country, countries),
     })
 }
