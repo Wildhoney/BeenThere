@@ -32,8 +32,6 @@ pub fn render(output: Output) {
 }
 
 mod print {
-    use std::fmt::format;
-
     use colored::*;
     use itertools::Itertools;
     use num_format::{Locale, ToFormattedString};
@@ -188,16 +186,28 @@ mod print {
 
         if let Some(latlng) = &country.latlng {
             let label = "Lat/Lng:".white();
-            let values = latlng.iter().map(|latlng| latlng.to_string()).collect::<Vec<_>>();
-            let value = format!("{}{}, {}{}", values[0], "°N".dimmed(), values[1], "°S".dimmed());
+            let values = latlng
+                .iter()
+                .map(|latlng| latlng.to_string())
+                .collect::<Vec<_>>();
+            let value = format!(
+                "{}{}, {}{}",
+                values[0],
+                "°N".dimmed(),
+                values[1],
+                "°S".dimmed()
+            );
             let url = format!("({})", &country.maps.google_maps)
                 .dimmed()
                 .underline();
             println!("{dimmed} {label} {value} {url}");
         }
 
-        // let label = "Language(s):".white();
-        // println!("{dimmed} {label}");
+        if let Some(languages) = &country.languages {
+            let label = "Language(s):".white();
+            let value = languages.values().join(", ");
+            println!("{dimmed} {label} {value}");
+        }
 
         if let Some(country) = &country.tld {
             let label = "TLD(s):".white();

@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
 
 pub type Countries = Vec<Country>;
@@ -12,6 +14,7 @@ pub struct Country {
     pub tld: Option<Vec<String>>,
     pub latlng: Option<Vec<f64>>,
     pub maps: Maps,
+    pub languages: Option<HashMap<String, String>>,
 
     #[serde(rename(deserialize = "altSpellings"))]
     pub alt_spellings: Vec<String>,

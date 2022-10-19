@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::app::types::{Countries, Country, Name};
 
 use super::types::Maps;
@@ -18,6 +20,7 @@ pub fn get_mock_countries() -> (Countries, Country, Country, Country) {
         maps: Maps {
             google_maps: "https://www.google.com/".to_string(),
         },
+        languages: Some(HashMap::new()),
     };
 
     let spain = Country {
@@ -34,6 +37,7 @@ pub fn get_mock_countries() -> (Countries, Country, Country, Country) {
         maps: Maps {
             google_maps: "https://www.google.com/".to_string(),
         },
+        languages: Some(HashMap::new()),
     };
 
     let greece = Country {
@@ -50,6 +54,7 @@ pub fn get_mock_countries() -> (Countries, Country, Country, Country) {
         maps: Maps {
             google_maps: "https://www.google.com/".to_string(),
         },
+        languages: Some(HashMap::new()),
     };
 
     (
