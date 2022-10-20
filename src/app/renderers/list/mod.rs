@@ -8,14 +8,19 @@ use term_table::table_cell::TableCell;
 use term_table::{Table, TableStyle};
 
 pub fn render(countries: &Countries) {
-    if countries.len() == 0 {
-        let any = "any".bold();
-        let home_country = "Not even your home country...".white();
-        println!("You haven't yet been to {any} countries! {home_country}");
-
-        return;
+    match countries.len() {
+        0 => render_visited_nowhere(),
+        _ => render_visited_somewhere(&countries),
     }
+}
 
+fn render_visited_nowhere() {
+    let any = "any".bold();
+    let home_country = "Not even your home country...".white();
+    println!("You haven't yet been to {any} countries! {home_country}");
+}
+
+fn render_visited_somewhere(countries: &Countries) {
     let count = countries.len().to_string().bold().cyan();
     println!("You have visited {count} countries!\n",);
 
