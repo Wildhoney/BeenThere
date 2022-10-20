@@ -31,17 +31,16 @@ fn render_visited_somewhere(countries: &Countries) {
     println!("\n");
 
     render_continents(&countries);
-    println!("\n");
+    println!("\n\n");
 
     render_countries(&countries);
 }
 
 fn render_people(countries: &Countries) {
     let (fewest_people, most_people) = get_countries_by_people(countries);
-    let data = [("Most", most_people), ("Fewest", fewest_people)];
     let line = "┃".dimmed();
 
-    for (prefix, country) in data {
+    for (prefix, country) in [("Most", most_people), ("Fewest", fewest_people)] {
         let name = country.name.common.white();
         let flag = &country.flag;
         let population = country.population.to_formatted_string(&Locale::en).white();
@@ -54,10 +53,9 @@ fn render_people(countries: &Countries) {
 
 fn render_land(countries: &Countries) {
     let (least_land, most_land) = get_countries_by_land(countries);
-    let data = [("Most", most_land), ("Least", least_land)];
     let line = "┃".dimmed();
 
-    for (prefix, country) in data {
+    for (prefix, country) in [("Most", most_land), ("Least", least_land)] {
         let name = country.name.common.white();
         let flag = &country.flag;
         let population = country.population.to_formatted_string(&Locale::en).white();
@@ -72,7 +70,6 @@ fn render_continents(countries: &Countries) {
     let continents = get_visited_continents(&countries);
     let title = "Continents".bold();
     let line = "┃".dimmed();
-
     print!("{line} {title}: ");
 
     continents.into_iter().for_each(|(continent, count)| {
@@ -86,7 +83,8 @@ fn render_continents(countries: &Countries) {
 }
 
 fn render_countries(countries: &Countries) {
-    println!("\n{}:", "Countries".white());
+    let title = "Countries".white();
+    println!("{title}:");
 
     let mut countries = countries.clone();
     countries.sort_by(|a, b| {

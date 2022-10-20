@@ -96,7 +96,8 @@ pub fn render(stats: &Stats) {
                 table.add_row(Row::new(countries));
             }
 
-            println!("{}", table.render());
+            let output = table.render();
+            println!("{output}");
         }
     }
 }
