@@ -34,7 +34,7 @@ pub fn render(countries: &Countries) {
 fn render_people(countries: &Countries) {
     let (fewest_people, most_people) = get_countries_by_people(countries);
     let data = [("Most", most_people), ("Fewest", fewest_people)];
-    let dimmed = "┃".dimmed();
+    let line = "┃".dimmed();
 
     for (prefix, country) in data {
         let name = country.name.common.white();
@@ -43,14 +43,14 @@ fn render_people(countries: &Countries) {
         let prefix = prefix.bold();
         let suffix = "ppl".dimmed();
 
-        println!("{dimmed} {prefix} people: {name} {flag}  ({population} {suffix})");
+        println!("{line} {prefix} people: {name} {flag}  ({population} {suffix})");
     }
 }
 
 fn render_land(countries: &Countries) {
     let (least_land, most_land) = get_countries_by_land(countries);
     let data = [("Most", most_land), ("Least", least_land)];
-    let dimmed = "┃".dimmed();
+    let line = "┃".dimmed();
 
     for (prefix, country) in data {
         let name = country.name.common.white();
@@ -59,16 +59,16 @@ fn render_land(countries: &Countries) {
         let prefix = prefix.bold();
         let suffix = "km2".dimmed();
 
-        println!("{dimmed} {prefix} land: {name} {flag}  ({population} {suffix})");
+        println!("{line} {prefix} land: {name} {flag}  ({population} {suffix})");
     }
 }
 
 fn render_continents(countries: &Countries) {
     let continents = get_visited_continents(&countries);
     let title = "Continents".bold();
-    let dimmed = "┃".dimmed();
+    let line = "┃".dimmed();
 
-    print!("{dimmed} {title}: ");
+    print!("{line} {title}: ");
 
     continents.into_iter().for_each(|(continent, count)| {
         let bullet = "◦".dimmed();

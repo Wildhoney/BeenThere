@@ -11,7 +11,7 @@ use term_table::{Table, TableStyle};
 pub fn render(stats: &Stats) {
     let name = &stats.country.name.common.bold();
     let flag = &stats.country.flag;
-    let dimmed = "┃".dimmed();
+    let line = "┃".dimmed();
     println!("{flag}  {name}\n");
 
     let visited = if stats.has_visited {
@@ -31,16 +31,16 @@ pub fn render(stats: &Stats) {
     let label = "Population:".white();
     let value = stats.country.population.to_formatted_string(&Locale::en);
     let suffix = "ppl".dimmed();
-    println!("{dimmed} {label} {value} {suffix}");
+    println!("{line} {label} {value} {suffix}");
 
     let label = "Area:".white();
     let value = (stats.country.area as usize).to_formatted_string(&Locale::en);
     let suffix = "km2".dimmed();
-    println!("{dimmed} {label} {value} {suffix}");
+    println!("{line} {label} {value} {suffix}");
 
     let label = "Continent(s):".white();
     let value = stats.country.continents.iter().join(",");
-    println!("{dimmed} {label} {value}");
+    println!("{line} {label} {value}");
 
     if let Some(latlng) = &stats.country.latlng {
         let label = "Lat/Lng:".white();
@@ -56,19 +56,19 @@ pub fn render(stats: &Stats) {
             "°S".dimmed()
         );
         let url = format!("({})", &stats.country.maps.google_maps.dimmed().underline()).dimmed();
-        println!("{dimmed} {label} {value} {url}");
+        println!("{line} {label} {value} {url}");
     }
 
     if let Some(languages) = &stats.country.languages {
         let label = "Language(s):".white();
         let value = languages.values().join(", ");
-        println!("{dimmed} {label} {value}");
+        println!("{line} {label} {value}");
     }
 
     if let Some(country) = &stats.country.tld {
         let label = "TLD(s):".white();
         let value = country.iter().join(", ");
-        println!("{dimmed} {label} {value}");
+        println!("{line} {label} {value}");
     }
 
     if let Some(borders) = &stats.country.borders {
