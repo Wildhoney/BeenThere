@@ -68,7 +68,7 @@ fn render_land(countries: &Countries) {
 
 fn render_continents(countries: &Countries) {
     let continents = get_visited_continents(&countries);
-    let title = "Continents".bold();
+    let title = "Continent(s)".bold();
     let line = "┃".dimmed();
     print!("{line} {title}: ");
 
