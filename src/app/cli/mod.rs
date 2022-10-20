@@ -1,6 +1,6 @@
 use clap::{arg, Command};
 
-use crate::app::manager::{add, info, list, remove};
+use crate::app::fs::{add, info, list, remove};
 use crate::app::types::Output;
 
 pub const FILENAME: &str = "been-there.json";

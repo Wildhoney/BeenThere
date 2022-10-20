@@ -130,7 +130,7 @@ mod tests {
     use std::fs::remove_file;
 
     use super::*;
-    use crate::app::{manager::add, mocks::get_mock_countries};
+    use crate::app::{fs::add, mocks::get_mock_countries};
 
     pub const MOCK_FILENAME: &str = "been-there.utils.mock.json";
 
