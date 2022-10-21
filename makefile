@@ -1,4 +1,5 @@
 build:
+	make format
 	make test
 	cargo build --release
 	mkdir -p ./bin
@@ -10,3 +11,7 @@ test:
 
 format:
 	cargo fmt
+
+b: build
+t: test
+f: format
