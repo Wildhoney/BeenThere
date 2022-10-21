@@ -1,4 +1,4 @@
-use crate::app::utils::{get_countries_by_land, get_visited_continents};
+use crate::app::utils::{get_countries_by_land, get_visited_continents, pluralise};
 use crate::app::{types::Countries, utils::get_countries_by_people};
 use colored::*;
 use num_format::Locale;
@@ -22,7 +22,8 @@ fn render_visited_nowhere() {
 
 fn render_visited_somewhere(countries: &Countries) {
     let count = countries.len().to_string().bold().cyan();
-    println!("You have visited {count} countries!\n",);
+    let suffix = pluralise(countries.len(), "country", "countries");
+    println!("You have visited {count} {suffix}!\n",);
 
     render_people(&countries);
     println!("\n");
@@ -68,7 +69,7 @@ fn render_land(countries: &Countries) {
 
 fn render_continents(countries: &Countries) {
     let continents = get_visited_continents(&countries);
-    let title = "Continent(s)".bold();
+    let title = pluralise(countries.len(), "Continent", "Continents").bold();
     let line = "┃".dimmed();
     print!("{line} {title}: ");
 

@@ -125,6 +125,13 @@ pub fn find_neighbouring_countries_by_cca3<'a>(
         .collect::<Vec<_>>()
 }
 
+pub fn pluralise<'a>(count: usize, singular: &'a str, plural: &'a str) -> &'a str {
+    match count {
+        1 => singular,
+        _ => plural,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::fs::remove_file;
@@ -231,5 +238,12 @@ mod tests {
             ),
             vec![&france, &greece]
         );
+    }
+
+    #[test]
+    fn it_should_be_able_to_pluralise_text() {
+        assert_eq!(pluralise(0, "imogen", "imogens"), "imogens");
+        assert_eq!(pluralise(1, "imogen", "imogens"), "imogen");
+        assert_eq!(pluralise(2, "imogen", "imogens"), "imogens");
     }
 }

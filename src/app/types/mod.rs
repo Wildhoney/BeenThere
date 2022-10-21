@@ -12,11 +12,14 @@ pub struct Country {
     pub population: usize,
     pub area: f64,
     pub continents: Vec<String>,
-    pub tld: Option<Vec<String>>,
+
     pub latlng: Option<Vec<f64>>,
     pub maps: Maps,
     pub languages: Option<HashMap<String, String>>,
     pub borders: Option<Vec<String>>,
+
+    #[serde(rename(deserialize = "tld"))]
+    pub tlds: Option<Vec<String>>,
 
     #[serde(rename(deserialize = "altSpellings"))]
     pub alt_spellings: Vec<String>,

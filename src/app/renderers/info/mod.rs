@@ -1,5 +1,6 @@
 use crate::app::types::Stats;
 use crate::app::utils::find_neighbouring_countries_by_cca3;
+use crate::app::utils::pluralise;
 use colored::*;
 use itertools::Itertools;
 use num_format::Locale;
@@ -38,7 +39,7 @@ pub fn render(stats: &Stats) {
     let suffix = "km2".dimmed();
     println!("{line} {label} {value} {suffix}");
 
-    let label = "Continent(s):".white();
+    let label = pluralise(stats.country.continents.len(), "Continent:", "Continents:").white();
     let value = stats.country.continents.iter().join(",");
     println!("{line} {label} {value}");
 
@@ -60,14 +61,14 @@ pub fn render(stats: &Stats) {
     }
 
     if let Some(languages) = &stats.country.languages {
-        let label = "Language(s):".white();
+        let label = pluralise(languages.len(), "Language:", "Languages:").white();
         let value = languages.values().join(", ");
         println!("{line} {label} {value}");
     }
 
-    if let Some(country) = &stats.country.tld {
-        let label = "TLD(s):".white();
-        let value = country.iter().join(", ");
+    if let Some(tlds) = &stats.country.tlds {
+        let label = pluralise(tlds.len(), "TLD:", "TLDs:").white();
+        let value = tlds.iter().join(", ");
         println!("{line} {label} {value}");
     }
 
