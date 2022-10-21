@@ -115,14 +115,14 @@ pub fn get_visited_continents(countries: &Countries) -> Continents {
     continents
 }
 
-pub fn find_neighbouring_countries_by_cca3<'a>(
-    cca3: &Vec<String>,
-    countries: &'a Countries,
-) -> Vec<&'a Country> {
+pub fn find_neighbouring_countries_by_cca3(cca3: &Vec<String>, countries: &Countries) -> Countries {
+    let mut countries = countries
+        .clone()
+        .iter()
+        .filter_map(|country| cca3.contains(&country.cca3).then_some(country.clone()))
+        .collect::<Vec<_>>();
+    countries.sort_by(|a, b| a.name.common.cmp(&b.name.common));
     countries
-        .into_iter()
-        .filter(|country| cca3.contains(&country.cca3))
-        .collect::<Vec<_>>()
 }
 
 pub fn pluralise<'a>(count: usize, singular: &'a str, plural: &'a str) -> &'a str {
@@ -236,7 +236,7 @@ mod tests {
                 &vec!["FRA".to_string(), "GRE".to_string()],
                 &countries
             ),
-            vec![&france, &greece]
+            vec![france, greece]
         );
     }
 
