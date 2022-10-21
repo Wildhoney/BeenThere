@@ -13,9 +13,6 @@ You can use `./been-there` to display the help screen, and use the `add`, `remov
 ## Screenshots
 
 ![Add](media/add.png)
-
 ![Remove](media/remove.png)
-
 ![Info](media/info.png)
-
 ![Error](media/error.png)
