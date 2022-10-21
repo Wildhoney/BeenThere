@@ -27,7 +27,7 @@ fn render_visited_somewhere(countries: &Countries, total_countries: usize) {
     let value = ((countries.len() as f64) / (total_countries as f64)) * 100.0;
     println!("You have visited {count} {suffix}!");
 
-    let value = format!("That's {:.1}% of {total_countries} countries.\n", value).dimmed();
+    let value = format!("🌍 That's {:.1}% of {total_countries} countries.\n", value).dimmed();
     println!("{value}\n");
 
     render_people(&countries);
