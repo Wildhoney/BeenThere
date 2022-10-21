@@ -1,3 +1,4 @@
+use crate::app::types::List;
 use crate::app::utils::{get_countries_by_land, get_visited_continents, pluralise};
 use crate::app::{types::Countries, utils::get_countries_by_people};
 use colored::*;
@@ -7,10 +8,10 @@ use term_table::row::Row;
 use term_table::table_cell::TableCell;
 use term_table::{Table, TableStyle};
 
-pub fn render(countries: &Countries) {
-    match countries.len() {
+pub fn render(model: &List) {
+    match model.visited_countries.len() {
         0 => render_visited_nowhere(),
-        _ => render_visited_somewhere(&countries),
+        _ => render_visited_somewhere(&model.visited_countries, model.total_countries),
     }
 }
 
@@ -20,10 +21,14 @@ fn render_visited_nowhere() {
     println!("You haven't yet been to {any} countries! {home_country}");
 }
 
-fn render_visited_somewhere(countries: &Countries) {
+fn render_visited_somewhere(countries: &Countries, total_countries: usize) {
     let count = countries.len().to_string().bold().cyan();
     let suffix = pluralise(countries.len(), "country", "countries");
-    println!("You have visited {count} {suffix}!\n",);
+    let value = ((countries.len() as f64) / (total_countries as f64)) * 100.0;
+    println!("You have visited {count} {suffix}!");
+
+    let value = format!("That's {:.1}% of {total_countries} countries.\n", value).dimmed();
+    println!("{value}\n");
 
     render_people(&countries);
     println!("\n");

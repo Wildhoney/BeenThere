@@ -15,8 +15,8 @@ pub fn print(output: Output) {
     match output {
         Output::Add(country) => modified::render_added(&country),
         Output::Remove(country) => modified::render_removed(&country),
-        Output::List(countries) => list::render(&countries),
-        Output::Info(stats) => info::render(&stats),
+        Output::List(model) => list::render(&model),
+        Output::Info(model) => info::render(&model),
 
         Output::Invalid(name) => {
             let name = name.white();

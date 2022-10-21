@@ -39,9 +39,9 @@ pub async fn run() -> Output {
     }
 }
 
-pub fn get_args() -> Command<'static> {
+pub fn get_args() -> Command {
     Command::new("been-there")
-        .about("Terminal application for listing the countries you've visited with other interesting statistics thrown in")
+        .about("Terminal application for listing the countries you've visited with other interesting statistics thrown in.")
         .subcommand_required(true)
         .arg_required_else_help(true)
         .allow_external_subcommands(true)

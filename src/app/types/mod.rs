@@ -39,18 +39,24 @@ pub struct Maps {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct Stats {
+pub struct Info {
     pub country: Country,
-    pub countries: Countries,
+    pub visited_countries: Countries,
     pub has_visited: bool,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct List {
+    pub visited_countries: Countries,
+    pub total_countries: usize,
 }
 
 #[derive(Debug, PartialEq)]
 pub enum Output {
     Add(Country),
     Remove(Country),
-    List(Countries),
-    Info(Stats),
+    List(List),
+    Info(Info),
     Invalid(String),
     Unwritable,
     Unfetchable,
