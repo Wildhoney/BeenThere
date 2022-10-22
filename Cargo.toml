@@ -8,7 +8,7 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.0.18", features = ["derive"] }
 reqwest = { version = "0.11.12", features = ["json"] }
-serde = { version = "1.0.146", features = ["derive"] }
+serde = { version = "1.0.147", features = ["derive"] }
 tokio = { version = "1.21.2", features = ["full"] }
 serde_json = "1.0.87"
 figlet-rs = "0.1.4"
