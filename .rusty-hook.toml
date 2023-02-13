@@ -1,0 +1,5 @@
+[hooks]
+pre-commit = "make t"
+
+[logging]
+verbose = true
