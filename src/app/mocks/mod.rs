@@ -4,8 +4,15 @@ use crate::app::types::{Countries, Country, Name};
 
 use super::types::Maps;
 
+pub struct MockedCountries {
+    pub all: Countries,
+    pub france: Country,
+    pub spain: Country,
+    pub greece: Country,
+}
+
 #[allow(dead_code)]
-pub fn get_mock_countries() -> (Countries, Country, Country, Country) {
+pub fn get_mocked_countries() -> MockedCountries {
     let france = Country {
         name: Name {
             common: "France".to_string(),
@@ -63,10 +70,10 @@ pub fn get_mock_countries() -> (Countries, Country, Country, Country) {
         cca3: "GRE".to_string(),
     };
 
-    (
-        vec![france.clone(), spain.clone(), greece.clone()],
+    MockedCountries {
+        all: vec![france.clone(), spain.clone(), greece.clone()],
         france,
         spain,
         greece,
-    )
+    }
 }

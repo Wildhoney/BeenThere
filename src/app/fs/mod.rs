@@ -45,16 +45,23 @@ pub fn info(filename: &str, country: &Country, countries: &Countries) -> Output 
 mod tests {
     use std::fs::remove_file;
 
+    use crate::app::mocks::{get_mocked_countries, MockedCountries};
+
     use super::*;
-    use crate::app::mocks::get_mock_countries;
 
     pub const MOCK_FILENAME: &str = "been-there.manager.mock.json";
 
     #[test]
     fn it_can_add_and_remove_countries() {
-        let (countries, france, spain, greece) = get_mock_countries();
+        let MockedCountries {
+            all,
+            france,
+            spain,
+            greece,
+        } = get_mocked_countries();
+
         assert_eq!(
-            list(MOCK_FILENAME, &countries),
+            list(MOCK_FILENAME, &all),
             Output::List(List {
                 visited_countries: vec![],
                 total_countries: 3
@@ -62,44 +69,41 @@ mod tests {
         );
 
         assert_eq!(
-            add(MOCK_FILENAME, &france, &countries),
+            add(MOCK_FILENAME, &france, &all),
             Output::Add(france.clone())
         );
         let expected_countries = Output::List(List {
             visited_countries: vec![france.clone()],
             total_countries: 3,
         });
-        assert_eq!(list(MOCK_FILENAME, &countries), expected_countries);
+        assert_eq!(list(MOCK_FILENAME, &all), expected_countries);
 
-        assert_eq!(
-            add(MOCK_FILENAME, &spain, &countries),
-            Output::Add(spain.clone())
-        );
+        assert_eq!(add(MOCK_FILENAME, &spain, &all), Output::Add(spain.clone()));
         let expected_countries = Output::List(List {
             visited_countries: vec![france.clone(), spain.clone()],
             total_countries: 3,
         });
-        assert_eq!(list(MOCK_FILENAME, &countries), expected_countries);
+        assert_eq!(list(MOCK_FILENAME, &all), expected_countries);
 
         assert_eq!(
-            add(MOCK_FILENAME, &greece, &countries),
+            add(MOCK_FILENAME, &greece, &all),
             Output::Add(greece.clone())
         );
         let expected_countries = Output::List(List {
             visited_countries: vec![france.clone(), spain.clone(), greece.clone()],
             total_countries: 3,
         });
-        assert_eq!(list(MOCK_FILENAME, &countries), expected_countries);
+        assert_eq!(list(MOCK_FILENAME, &all), expected_countries);
 
         assert_eq!(
-            remove(MOCK_FILENAME, &france, &countries),
+            remove(MOCK_FILENAME, &france, &all),
             Output::Remove(france.clone())
         );
         let expected_countries = Output::List(List {
             visited_countries: vec![spain.clone(), greece.clone()],
             total_countries: 3,
         });
-        assert_eq!(list(MOCK_FILENAME, &countries), expected_countries);
+        assert_eq!(list(MOCK_FILENAME, &all), expected_countries);
 
         remove_file(MOCK_FILENAME).ok();
     }
