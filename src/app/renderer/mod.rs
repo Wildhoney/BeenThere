@@ -1,9 +1,13 @@
 use colored::*;
 use figlet_rs::FIGfont;
 
+mod error;
+mod info;
+mod list;
+mod modified;
+
 use crate::app::{
-    cli::{CMD_ADD, CMD_INFO, CMD_LIST, CMD_REMOVE, FILENAME},
-    renderers::{error, info, list, modified},
+    config::{CMD_ADD, CMD_INFO, CMD_LIST, CMD_REMOVE, JSON_PATH},
     types::Output,
 };
 
@@ -23,7 +27,7 @@ pub fn print(output: Output) {
             error::render(&format!("Invalid country: {name}."))
         }
         Output::Unwritable => {
-            let filename = FILENAME.white();
+            let filename = JSON_PATH.as_str().white();
             error::render(&format!("Cannot write countries to: {filename}."))
         }
         Output::Unfetchable => error::render("Cannot fetch countries at the moment."),

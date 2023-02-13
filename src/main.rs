@@ -1,18 +1,22 @@
+// mod cli;
+// mod config;
+// mod db;
+// mod renderer;
+// mod types;
+
 mod app {
     pub mod cli;
+    pub mod config;
     pub mod fs;
     pub mod mocks;
+    pub mod renderer;
     pub mod types;
     pub mod utils;
-
-    pub mod renderer;
-    pub mod renderers {
-        pub mod error;
-        pub mod info;
-        pub mod list;
-        pub mod modified;
-    }
 }
+
+#[macro_use]
+extern crate lazy_static;
+extern crate inflector;
 
 #[tokio::main]
 pub async fn main() {
