@@ -14,7 +14,7 @@ format:
 
 install:
 	make b
-	sudo cp bin/tdo /usr/local/bin
+	sudo cp bin/been-there /usr/local/bin
 
 b: build
 t: test
