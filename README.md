@@ -2,7 +2,7 @@
 
 > Terminal application for listing the countries you've visited with other interesting statistics thrown in
 
-![Status](https://github.com/Wildhoney/BeenThere/actions/workflows/rust.yml/badge.svg)
+![Status](https://github.com/Wildhoney/BeenThere/actions/workflows/integrity.yml/badge.svg)
 
 ![Main](media/main.png)
 
