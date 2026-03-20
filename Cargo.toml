@@ -2,8 +2,10 @@
 name = "been-there"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "Terminal application for listing the countries you've visited with other interesting statistics thrown in"
+license = "MIT"
+repository = "https://github.com/Wildhoney/BeenThere"
+homepage = "https://github.com/Wildhoney/BeenThere"
 
 [dependencies]
 clap = { version = "4.0.18", features = ["derive"] }
